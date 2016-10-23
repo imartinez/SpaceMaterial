@@ -26,6 +26,9 @@ proguard/
 # Log Files
 *.log
 
+# Android Studio native
+.externalNativeBuild
+
 # Android Studio Navigation editor temp files
 .navigation/
 
@@ -35,6 +38,11 @@ captures/
 # Intellij
 *.iml
 .idea/workspace.xml
+.idea/workspace.xml
+.idea/libraries
 
 # Keystore files
 *.jks
+
+# OSx
+.DS_Store

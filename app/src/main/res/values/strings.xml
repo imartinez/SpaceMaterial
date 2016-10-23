@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SpaceMaterial</string>
+
+    <!-- Bototm bar -->
+    <string name="iss_location">ISS Location</string>
+    <string name="people_in_space">People in Space</string>
+    <string name="iss_pass_times">ISS pass Times</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
