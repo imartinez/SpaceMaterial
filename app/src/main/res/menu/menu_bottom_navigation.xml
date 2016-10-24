@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+      android:id="@+id/tab_iss_location"
+      android:icon="@drawable/ic_public_black_24dp"
+      android:title="@string/iss_location"/>
+  <item
+      android:id="@+id/tab_people_in_space"
+      android:icon="@drawable/ic_person_pin_black_24dp"
+      android:title="@string/people_in_space"/>
+  <item
+      android:id="@+id/tab_iss_pass_times"
+      android:icon="@drawable/ic_access_alarm_black_24dp"
+      android:title="@string/iss_pass_times"/>
+</menu>

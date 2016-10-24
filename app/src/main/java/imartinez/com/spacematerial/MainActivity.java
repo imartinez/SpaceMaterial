@@ -1,21 +1,22 @@
 package imartinez.com.spacematerial;
 
-import android.support.annotation.IdRes;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
+import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import imartinez.com.spacematerial.isslocation.IssLocationFragment;
 
 import static butterknife.ButterKnife.findById;
+import static imartinez.com.spacematerial.R.id.bottom_navigation_view;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PEOPLE_IN_SPACE_FRAGMENT_POSITION = 1;
     private static final int ISS_PASS_TIMES_FRAGMENT_POSITION = 2;
 
-    @BindView(R.id.contentViewPager)
+    @BindView(R.id.content_view_pager)
     ViewPager mContentViewPager;
 
     @Override
@@ -37,11 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         // Bottom bar
-        BottomBar bottomBar = findById(this, R.id.bottomBar);
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+        BottomNavigationView bottomNavigationView = findById(this, bottom_navigation_view);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new OnNavigationItemSelectedListener() {
             @Override
-            public void onTabSelected(@IdRes int tabId) {
-                switch (tabId) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
                     case R.id.tab_iss_location:
                         mContentViewPager.setCurrentItem(ISS_LOCATION_FRAGMENT_POSITION, false);
                         break;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                         mContentViewPager.setCurrentItem(ISS_PASS_TIMES_FRAGMENT_POSITION, false);
                         break;
                 }
-
+                return true;
             }
         });
 
