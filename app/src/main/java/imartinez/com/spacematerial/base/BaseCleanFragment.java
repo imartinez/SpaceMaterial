@@ -1,22 +1,22 @@
 package imartinez.com.spacematerial.base;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.View;
 
 public abstract class BaseCleanFragment<T extends BasePresenter<?, ?>> extends Fragment {
 
     private T presenter;
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         // Retrieve presenter instance
         this.presenter = resolvePresenter();
 
-        // Call onCreateView
-        this.presenter.onCreateView();
+        // Call onViewReady
+        this.presenter.onViewReady();
     }
 
     protected abstract T resolvePresenter();
@@ -24,7 +24,7 @@ public abstract class BaseCleanFragment<T extends BasePresenter<?, ?>> extends F
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getPresenter().onDestroyView();
+        getPresenter().onViewDestroyed();
         getPresenter().unBindViewAndRouter();
     }
 

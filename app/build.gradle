@@ -22,7 +22,7 @@ android {
     productFlavors {
         dev {
             // Use same as compileSdkVersion to speed up builds.
-            minSdkVersion 25
+            minSdkVersion 23
         }
         prod {
             // The actual minSdkVersion for the application.
@@ -40,6 +40,11 @@ dependencies {
 
     // IntelliJ annotations
     compile 'com.intellij:annotations:12.0'
+
+    // Dagger 2
+    apt 'com.google.dagger:dagger-compiler:2.7'
+    compile 'com.google.dagger:dagger:2.7'
+    provided 'javax.annotation:jsr250-api:1.0'
 
     // RxAndroid and RxJava
     compile 'io.reactivex:rxandroid:1.2.1'
@@ -67,4 +72,6 @@ dependencies {
 
     // Test
     testCompile 'junit:junit:4.12'
+    dependencies { testCompile "org.mockito:mockito-core:2.2.8" }
+
 }

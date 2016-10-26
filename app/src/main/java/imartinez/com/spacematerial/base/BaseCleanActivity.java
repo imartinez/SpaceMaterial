@@ -18,8 +18,8 @@ public abstract class BaseCleanActivity<T extends BasePresenter<?, ?>> extends A
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        // Call onCreateView
-        this.presenter.onCreateView();
+        // Call onViewReady
+        this.presenter.onViewReady();
     }
 
     protected abstract T resolvePresenter();
@@ -27,7 +27,7 @@ public abstract class BaseCleanActivity<T extends BasePresenter<?, ?>> extends A
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        getPresenter().onDestroyView();
+        getPresenter().onViewDestroyed();
         getPresenter().unBindViewAndRouter();
     }
 

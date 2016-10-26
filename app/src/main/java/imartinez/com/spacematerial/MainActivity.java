@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import imartinez.com.spacematerial.isslocation.IssLocationFragment;
+import imartinez.com.spacematerial.net.RetrofitFactory;
+import javax.inject.Inject;
 
 import static butterknife.ButterKnife.findById;
 import static imartinez.com.spacematerial.R.id.bottom_navigation_view;
@@ -24,11 +26,18 @@ public class MainActivity extends AppCompatActivity {
     private static final int PEOPLE_IN_SPACE_FRAGMENT_POSITION = 1;
     private static final int ISS_PASS_TIMES_FRAGMENT_POSITION = 2;
 
+    @Inject
+    RetrofitFactory retrofitFactory;
+
     @BindView(R.id.content_view_pager)
-    ViewPager mContentViewPager;
+    ViewPager contentViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((App) getApplication()).getAppComponent().inject(this);
+
+        retrofitFactory.toString();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -44,13 +53,13 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.tab_iss_location:
-                        mContentViewPager.setCurrentItem(ISS_LOCATION_FRAGMENT_POSITION, false);
+                        contentViewPager.setCurrentItem(ISS_LOCATION_FRAGMENT_POSITION, false);
                         break;
                     case R.id.tab_people_in_space:
-                        mContentViewPager.setCurrentItem(PEOPLE_IN_SPACE_FRAGMENT_POSITION, false);
+                        contentViewPager.setCurrentItem(PEOPLE_IN_SPACE_FRAGMENT_POSITION, false);
                         break;
                     case R.id.tab_iss_pass_times:
-                        mContentViewPager.setCurrentItem(ISS_PASS_TIMES_FRAGMENT_POSITION, false);
+                        contentViewPager.setCurrentItem(ISS_PASS_TIMES_FRAGMENT_POSITION, false);
                         break;
                 }
                 return true;
@@ -59,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ViewPager
         FragmentPagerAdapter mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
-        mContentViewPager.setAdapter(mainPagerAdapter);
+        contentViewPager.setAdapter(mainPagerAdapter);
     }
 
     private static class MainPagerAdapter extends FragmentPagerAdapter {

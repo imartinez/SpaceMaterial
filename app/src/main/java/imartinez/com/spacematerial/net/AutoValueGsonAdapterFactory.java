@@ -1,4 +1,4 @@
-package imartinez.com.spacematerial.isslocation;
+package imartinez.com.spacematerial.net;
 
 import com.google.gson.TypeAdapterFactory;
 import com.ryanharter.auto.value.gson.GsonTypeAdapterFactory;
@@ -7,10 +7,10 @@ import com.ryanharter.auto.value.gson.GsonTypeAdapterFactory;
  * TypeAdapterFactory for all auto-value-gson classes used in the network layer.
  */
 @GsonTypeAdapterFactory
-abstract class IssLocationServiceAdapterFactory implements TypeAdapterFactory {
+abstract class AutoValueGsonAdapterFactory implements TypeAdapterFactory {
 
     public static TypeAdapterFactory create() {
-        return new AutoValueGson_IssLocationServiceAdapterFactory();
+        return new AutoValueGson_AutoValueGsonAdapterFactory();
     }
 
 }

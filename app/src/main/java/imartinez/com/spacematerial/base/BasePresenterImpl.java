@@ -12,12 +12,12 @@ public abstract class BasePresenterImpl<V, R> implements BasePresenter<V, R> {
     private CompositeSubscription compositeSubscription;
 
     @Override
-    public void onCreateView() {
+    public void onViewReady() {
         cancelSubscriptions();
     }
 
     @Override
-    public void onDestroyView() {
+    public void onViewDestroyed() {
         cancelSubscriptions();
     }
 
