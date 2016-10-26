@@ -1,16 +1,21 @@
 package imartinez.com.spacematerial.net;
 
 import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
+
 import okhttp3.Cache;
+import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.io.IOException;
 
 /**
  * TODO: Add class description.
@@ -20,12 +25,47 @@ import java.io.IOException;
  */
 public class RetrofitFactory {
 
-    private static final int CACHE_MAX_STALE = 60 * 60 * 24 * 28;
+    public static final String CACHE_CONTROL = "Cache-Control";
+    private static final int FORCED_CACHE_MAX_STALE_DAYS = 7; // tolerate 1-week stale
+    public static final int BASIC_CACHE_MAX_AGE_SECONDS = 5; // basic cache seconds
 
     private final String baseUrl;
     private final GsonConverterFactory gsonConverterFactory;
     private final OkHttpClient baseNetworkClient;
     private final OkHttpClient cacheOnlyNetworkClient;
+
+    private static final Interceptor basicCacheInterceptor = new Interceptor() {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Response originalResponse = chain.proceed(chain.request());
+
+            CacheControl cacheControl = new CacheControl.Builder()
+                    .maxAge(BASIC_CACHE_MAX_AGE_SECONDS, TimeUnit.SECONDS)
+                    .build();
+
+            return originalResponse.newBuilder()
+                    .header(CACHE_CONTROL, cacheControl.toString())
+                    .build();
+        }
+    };
+
+    private static final Interceptor cacheOnlyInterceptor = new Interceptor() {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request originalRequest = chain.request();
+
+            CacheControl cacheControl = new CacheControl.Builder()
+                    .onlyIfCached()
+                    .maxStale(FORCED_CACHE_MAX_STALE_DAYS, TimeUnit.DAYS)
+                    .build();
+
+            originalRequest = originalRequest.newBuilder()
+                    .cacheControl(cacheControl)
+                    .build();
+
+            return chain.proceed(originalRequest);
+        }
+    };
 
     @Inject
     public RetrofitFactory(Cache cache) {
@@ -80,6 +120,7 @@ public class RetrofitFactory {
 
         return new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
+                .addNetworkInterceptor(basicCacheInterceptor)
                 .cache(cache)
                 .build();
     }
@@ -92,21 +133,14 @@ public class RetrofitFactory {
      * returns results from the given cache, never goes to the Internet.
      */
     private OkHttpClient createCacheOnlyHttpClient(Cache cache) {
-        // Cache only interceptor
-        Interceptor cacheOnlyInterceptor = new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Response originalResponse = chain.proceed(chain.request());
-                return originalResponse.newBuilder()
-                        .header("Cache-Control", "public, only-if-cached, max-stale=" + CACHE_MAX_STALE)
-                        .build();
-            }
-        };
+        // Logs interceptor
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        // Clone basic http client and add the new interceptor
-        return createBasicHttpClient(cache)
-                .newBuilder()
-                .addNetworkInterceptor(cacheOnlyInterceptor)
+        return new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .addInterceptor(cacheOnlyInterceptor)
+                .cache(cache)
                 .build();
     }
 

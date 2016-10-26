@@ -23,7 +23,7 @@ public interface ConnectivityController {
         @Override
         public boolean isConnected() {
             NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-            return activeNetwork.isConnectedOrConnecting();
+            return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         }
     }
 
