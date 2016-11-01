@@ -1,13 +1,13 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="imartinez.com.spacematerial.isslocation.IssLocationFragment">
 
-    <TextView
-        android:id="@+id/iss_location_textview"
+    <com.google.android.gms.maps.MapView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/iss_location" />
+        android:id="@+id/iss_location_map" />
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

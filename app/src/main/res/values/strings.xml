@@ -5,5 +5,6 @@
     <string name="iss_location">ISS Location</string>
     <string name="people_in_space">People in Space</string>
     <string name="iss_pass_times">ISS pass Times</string>
+    <string name="error_fetching_iss_location">Error fetching ISS location</string>
 
 </resources>

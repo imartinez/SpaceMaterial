@@ -6,10 +6,13 @@ android {
     buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "imartinez.com.spacematerial"
-        targetSdkVersion 25
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // Google maps api
+        resValue "string", "google_maps_api_key", googleMapsApiKey
     }
 
     buildTypes {
@@ -37,6 +40,7 @@ dependencies {
     // Android
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.android.support:design:25.0.0'
+    compile 'com.google.android.gms:play-services-maps:9.8.0'
 
     // IntelliJ annotations
     compile 'com.intellij:annotations:12.0'

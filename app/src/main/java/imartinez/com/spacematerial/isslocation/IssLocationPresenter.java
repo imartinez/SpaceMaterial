@@ -16,7 +16,7 @@ import rx.schedulers.Schedulers;
  * Created on 26/10/16.
  */
 class IssLocationPresenter extends BasePresenterImpl<IssLocationView, IssLocationRouter> implements
-        BasePresenter<IssLocationView, IssLocationRouter>{
+        BasePresenter<IssLocationView, IssLocationRouter> {
 
     interface IssLocationView {
         // TODO: 26/10/16 Use viewModel? Current model is immutable
@@ -38,10 +38,7 @@ class IssLocationPresenter extends BasePresenterImpl<IssLocationView, IssLocatio
         this.uiScheduler = uiScheduler;
     }
 
-    @Override
-    public void onViewReady() {
-        super.onViewReady();
-
+    public void onMapReady() {
         track(getIssLocationInteractor.getIssLocation()
                 .subscribeOn(Schedulers.io())
                 .observeOn(uiScheduler)
