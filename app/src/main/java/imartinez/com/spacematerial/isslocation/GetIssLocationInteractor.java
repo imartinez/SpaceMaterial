@@ -14,6 +14,7 @@ import java.io.IOException;
  */
 interface GetIssLocationInteractor {
 
+    // TODO: 1/11/16 Convert this to a Rx Producer, polling the ISS location periodically
     Observable<IssLocation> getIssLocation();
 
     class Impl implements GetIssLocationInteractor {
