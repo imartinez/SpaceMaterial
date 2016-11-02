@@ -1,10 +1,11 @@
 package imartinez.com.spacematerial.isslocation;
 
-import imartinez.com.spacematerial.isslocation.IssLocationApi.IssLocationApiResponse;
-import imartinez.com.spacematerial.net.RetrofitFactory;
+import java.io.IOException;
+
 import javax.inject.Inject;
 
-import java.io.IOException;
+import imartinez.com.spacematerial.isslocation.IssLocationApi.IssLocationApiResponse;
+import imartinez.com.spacematerial.net.RetrofitFactory;
 
 interface IssLocationNetworkController {
 
@@ -18,8 +19,10 @@ interface IssLocationNetworkController {
 
         @Inject
         RetrofitImpl(RetrofitFactory retrofitFactory) {
-            networkService = retrofitFactory.create(IssLocationApi.class);
-            cacheService = retrofitFactory.createCacheOnly(IssLocationApi.class);
+            networkService = retrofitFactory.create(IssLocationApi.ISS_LOCATION_API_BASE_URL,
+                    IssLocationApi.class);
+            cacheService = retrofitFactory.createCacheOnly(IssLocationApi.ISS_LOCATION_API_BASE_URL,
+                    IssLocationApi.class);
         }
 
         @Override
@@ -32,8 +35,8 @@ interface IssLocationNetworkController {
 
             return IssLocation.builder()
                     .setTimestamp(serviceResponse.timestamp())
-                    .setLatitude(serviceResponse.issPosition().latitude())
-                    .setLongitude(serviceResponse.issPosition().longitude())
+                    .setLatitude(serviceResponse.latitude())
+                    .setLongitude(serviceResponse.longitude())
                     .build();
         }
 
@@ -42,8 +45,8 @@ interface IssLocationNetworkController {
             IssLocationApiResponse serviceResponse = networkService.fetchIssLocation().execute().body();
             return IssLocation.builder()
                     .setTimestamp(serviceResponse.timestamp())
-                    .setLatitude(serviceResponse.issPosition().latitude())
-                    .setLongitude(serviceResponse.issPosition().longitude())
+                    .setLatitude(serviceResponse.latitude())
+                    .setLongitude(serviceResponse.longitude())
                     .build();
         }
     }

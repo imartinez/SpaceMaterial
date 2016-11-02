@@ -14,30 +14,25 @@ import retrofit2.http.GET;
  * Also contains the response auto-value model.
  */
 public interface IssLocationApi {
-    @GET("iss-now.json")
+
+    String ISS_LOCATION_API_BASE_URL = "https://api.wheretheiss.at/v1/";
+
+    @GET("satellites/25544")
     Call<IssLocationApiResponse> fetchIssLocation();
 
     @AutoValue
     abstract class IssLocationApiResponse {
 
-        abstract String message();
+        abstract double latitude();
+        abstract double longitude();
+        abstract double altitude();
+        abstract double velocity();
+        abstract String visibility();
         abstract long timestamp();
-        @SerializedName("iss_position") abstract IssLocationApiResponse.IssPosition issPosition();
 
         public static TypeAdapter<IssLocationApiResponse> typeAdapter(Gson gson) {
             return new AutoValue_IssLocationApi_IssLocationApiResponse.GsonTypeAdapter(gson);
         }
 
-        @AutoValue
-        public abstract static class IssPosition {
-
-            public static TypeAdapter<IssPosition> typeAdapter(Gson gson) {
-                return new AutoValue_IssLocationApi_IssLocationApiResponse_IssPosition.GsonTypeAdapter(gson);
-            }
-
-            abstract double latitude();
-            abstract double longitude();
-
-        }
     }
 }

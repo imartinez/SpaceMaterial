@@ -1,5 +1,5 @@
 # SpaceMaterial
-Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI...) and Material design. It makes use of http://open-notify.org/ API
+Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI...) and Material design. It makes use of http://wheretheiss.at/ API
 
 # FEATURES OF THE APP (WIP)
 - auto-value and auto-value-gson

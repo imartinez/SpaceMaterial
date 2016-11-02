@@ -114,7 +114,7 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
         if (locationMarker != null) {
             locationMarker.remove();
         }
-        locationMarker = map.addMarker(new MarkerOptions().title("ISS Location").position(latLng));
+        locationMarker = map.addMarker(new MarkerOptions().title(getString(R.string.iss_location_title)).position(latLng));
         locationMarker.setSnippet(getDateCurrentTimeZone(issLocation.timestamp()));
         locationMarker.showInfoWindow();
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));

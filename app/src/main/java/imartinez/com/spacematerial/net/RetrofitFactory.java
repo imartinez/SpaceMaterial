@@ -27,7 +27,6 @@ public class RetrofitFactory {
     private static final int FORCED_CACHE_MAX_STALE_DAYS = 7; // tolerate 1-week stale
     private static final int BASIC_CACHE_MAX_AGE_SECONDS = 5; // basic cache seconds
 
-    private final String baseUrl;
     private final GsonConverterFactory gsonConverterFactory;
     private final OkHttpClient baseNetworkClient;
     private final OkHttpClient cacheOnlyNetworkClient;
@@ -67,8 +66,6 @@ public class RetrofitFactory {
 
     @Inject
     public RetrofitFactory(Cache cache) {
-        // TODO: 25/10/16 Inject the base url
-        baseUrl = "http://api.open-notify.org/";
         gsonConverterFactory = createAutoValueGsonConverterFactory();
         baseNetworkClient = createBasicHttpClient(cache);
         cacheOnlyNetworkClient = createCacheOnlyHttpClient(cache);
@@ -80,7 +77,7 @@ public class RetrofitFactory {
      * @param <T>
      * @return
      */
-    public <T> T create(final Class<T> service) {
+    public <T> T create(String baseUrl, final Class<T> service) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(baseNetworkClient)
@@ -96,7 +93,7 @@ public class RetrofitFactory {
      * @param <T>
      * @return
      */
-    public <T> T createCacheOnly(final Class<T> service) {
+    public <T> T createCacheOnly(String baseUrl, final Class<T> service) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(cacheOnlyNetworkClient)
