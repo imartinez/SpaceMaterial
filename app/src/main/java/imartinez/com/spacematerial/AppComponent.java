@@ -1,12 +1,14 @@
 package imartinez.com.spacematerial;
 
 import android.app.Application;
+import android.content.Context;
 
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 import imartinez.com.spacematerial.AppComponent.AppModule;
 import imartinez.com.spacematerial.connectivity.ConnectivityController;
+import imartinez.com.spacematerial.connectivity.ConnectivityModule;
 import imartinez.com.spacematerial.net.NetModule;
 import imartinez.com.spacematerial.net.RetrofitFactory;
 import javax.inject.Singleton;
@@ -19,7 +21,7 @@ import rx.android.schedulers.AndroidSchedulers;
  * Created on 26/10/16.
  */
 @Singleton
-@Component(modules = {AppModule.class, NetModule.class})
+@Component(modules = {AppModule.class, NetModule.class, ConnectivityModule.class})
 public interface AppComponent {
     void inject(MainActivity activity);
 
@@ -45,14 +47,14 @@ public interface AppComponent {
         }
 
         @Provides
-        Scheduler providesUIScheduler() {
-            return AndroidSchedulers.mainThread();
+        @Singleton
+        Context providesApplicationContext() {
+            return application;
         }
 
         @Provides
-        @Singleton
-        ConnectivityController providesConnectivityController(Application application) {
-            return new ConnectivityController.Impl(application);
+        Scheduler providesUIScheduler() {
+            return AndroidSchedulers.mainThread();
         }
 
     }

@@ -24,10 +24,4 @@ public class NetModule {
         return cache;
     }
 
-    @Provides
-    @Singleton
-    RetrofitFactory provideRetrofitFactory(Cache cache) {
-        return new RetrofitFactory(cache);
-    }
-
 }

@@ -13,6 +13,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Integration test that checks the API is alive and responds with valid data.
+ * // TODO: 2/11/16 This integration test does not make sense. Remove.
  */
 public class IssLocationApiIntegrationTest {
 

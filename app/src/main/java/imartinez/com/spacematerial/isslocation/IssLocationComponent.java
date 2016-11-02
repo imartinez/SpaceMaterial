@@ -4,12 +4,10 @@ import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 import imartinez.com.spacematerial.AppComponent;
-import imartinez.com.spacematerial.connectivity.ConnectivityController;
 import imartinez.com.spacematerial.isslocation.IssLocationComponent.IssLocationModule;
 import imartinez.com.spacematerial.isslocation.IssLocationComponent.IssLocationScope;
-import imartinez.com.spacematerial.net.RetrofitFactory;
+import imartinez.com.spacematerial.isslocation.IssLocationNetworkController.RetrofitImpl;
 import javax.inject.Scope;
-import rx.Scheduler;
 
 /**
  *
@@ -32,25 +30,9 @@ interface IssLocationComponent {
 
         @Provides
         @IssLocationScope
-        IssLocationPresenter providesIssLocationPresenter(
-                GetIssLocationInteractor getIssLocationInteractor, Scheduler uiScheduler) {
-            return new IssLocationPresenter(getIssLocationInteractor, uiScheduler);
-        }
-
-        @Provides
-        @IssLocationScope
-        GetIssLocationInteractor providesGetIssLocationInteractor(
-                ConnectivityController connectivityController,
-                IssLocationNetworkController issLocationNetworkController) {
-            return new GetIssLocationInteractor.Impl(connectivityController,
-                    issLocationNetworkController);
-        }
-
-        @Provides
-        @IssLocationScope
         IssLocationNetworkController providesIssLocationNetworkController(
-                RetrofitFactory retrofitFactory) {
-            return new IssLocationNetworkController.RetrofitImpl(retrofitFactory);
+                RetrofitImpl retrofitNetworkController) {
+            return retrofitNetworkController;
         }
 
     }

@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import butterknife.BindView;
@@ -50,6 +51,7 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
 
     private OnIssLocationUpdatedListener onIssLocationUpdateListener;
     private GoogleMap map;
+    private Marker locationMarker;
 
     public static IssLocationFragment newInstance() {
         IssLocationFragment fragment = new IssLocationFragment();
@@ -109,16 +111,25 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
     public void presentIssLocation(IssLocation issLocation) {
         // Add a marker in ISS location and move the camera
         LatLng latLng = new LatLng(issLocation.latitude(), issLocation.longitude());
-        Marker marker = map.addMarker(new MarkerOptions().position(latLng)
-                .title("ISS Location")
-                .snippet(getDateCurrentTimeZone(issLocation.timestamp())));
-        marker.showInfoWindow();
+        if (locationMarker != null) {
+            locationMarker.remove();
+        }
+        locationMarker = map.addMarker(new MarkerOptions().title("ISS Location").position(latLng));
+        locationMarker.setSnippet(getDateCurrentTimeZone(issLocation.timestamp()));
+        locationMarker.showInfoWindow();
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
     @Override
     public void presentIssRetrievalError() {
-        Snackbar.make(getView(), R.string.error_fetching_iss_location, Snackbar.LENGTH_SHORT);
+        Snackbar.make(getView(), R.string.error_fetching_iss_location, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.retry, new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        getPresenter().onRetrySelected();
+                    }
+                })
+                .show();
     }
 
     @Override
@@ -146,7 +157,7 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
             Date currenTimeZone = (Date) calendar.getTime();
             return sdf.format(currenTimeZone);
         }catch (Exception e) {
+            return "";
         }
-        return "";
     }
 }

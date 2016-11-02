@@ -1,71 +1,80 @@
 package imartinez.com.spacematerial.isslocation;
 
-import imartinez.com.spacematerial.connectivity.ConnectivityController;
+import javax.inject.Inject;
 import rx.Observable;
-import rx.Observable.OnSubscribe;
-import rx.Subscriber;
+import rx.functions.Func1;
 
-import java.io.IOException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * TODO: Add class description.
  *
  * Created on 25/10/16.
  */
-interface GetIssLocationInteractor {
+class GetIssLocationInteractor {
 
-    // TODO: 1/11/16 Convert this to a Rx Producer, polling the ISS location periodically
-    Observable<IssLocation> getIssLocation();
+    private static final int LOCATION_POLLING_INTERVAL_SECONDS = 5;
+    private static final int MAX_RETRIES_ON_SERVER_FAILURE = 3;
 
-    class Impl implements GetIssLocationInteractor {
+    private final IssLocationNetworkController issLocationNetworkController;
 
-        private final ConnectivityController connectivityController;
-        private final IssLocationNetworkController issLocationNetworkController;
-
-        public Impl(ConnectivityController connectivityController,
-                IssLocationNetworkController issLocationNetworkController) {
-            this.connectivityController = connectivityController;
-            this.issLocationNetworkController = issLocationNetworkController;
-        }
-
-        @Override
-        public Observable<IssLocation> getIssLocation() {
-            return Observable.create(new IssLocationOnSubscribe());
-        }
-
-        /**
-         * First returns cached location and then tries
-         * to fetch the latest location from network. If no location was
-         * returned, onError is called with the proper IOException
-         */
-        private class IssLocationOnSubscribe implements OnSubscribe<IssLocation> {
-            @Override
-            public void call(Subscriber<? super IssLocation> subscriber) {
-                // TODO: 25/10/16 manage errors somehow
-                boolean cachedValueReturned;
-                try {
-                    subscriber.onNext(issLocationNetworkController.getCachedIssLocation());
-                    cachedValueReturned = true;
-                } catch (IOException e) {
-                    // No cached value
-                    cachedValueReturned = false;
+    /**
+     * Get cached ISS location from disk cache.
+     */
+    private Observable<IssLocation> getCachedIssLocationObservable =
+            Observable.fromCallable(new Callable<IssLocation>() {
+                @Override
+                public IssLocation call() throws Exception {
+                    return issLocationNetworkController.getCachedIssLocation();
                 }
+            });
 
-                if (connectivityController.isConnected()) {
-                    try {
-                        subscriber.onNext(issLocationNetworkController.fetchIssLocation());
-                    } catch (IOException e) {
-                        // No network value
-                        // If no cache value was returned either, call onError
-                        if (!cachedValueReturned) {
-                            subscriber.onError(e);
+    /**
+     * Fetch ISS location from server.
+     */
+    private Observable<IssLocation> fetchIssLocationObservable =
+            Observable.fromCallable(new Callable<IssLocation>() {
+                @Override
+                public IssLocation call() throws Exception {
+                    return issLocationNetworkController.fetchIssLocation();
+                }
+            });
+
+    /**
+     * Polling of ISS location. If the server fails a certain number of times,
+     * send onError signal and stop polling.
+     */
+    private Observable<IssLocation> pollIssLocationObservable =
+            Observable.interval(LOCATION_POLLING_INTERVAL_SECONDS, TimeUnit.SECONDS)
+                    .flatMap(new Func1<Long, Observable<IssLocation>>() {
+                        @Override
+                        public Observable<IssLocation> call(Long aLong) {
+                            return fetchIssLocationObservable;
                         }
-                    }
-                }
+                    })
+                    .retry(MAX_RETRIES_ON_SERVER_FAILURE);
 
-                subscriber.onCompleted();
-            }
-        }
+    @Inject
+    public GetIssLocationInteractor(IssLocationNetworkController issLocationNetworkController) {
+        this.issLocationNetworkController = issLocationNetworkController;
+    }
+
+    /**
+     * First returns cached location. If there is no cached location, tries to fetch
+     * from server. If it fails, send onError signal and stop.
+     * If there is a cached location or the server responds with valid data,
+     * start polling the server.
+     */
+    public Observable<IssLocation> getIssLocation() {
+        return getCachedIssLocationObservable
+                .onErrorResumeNext(new Func1<Throwable, Observable<IssLocation>>() {
+                    @Override
+                    public Observable<IssLocation> call(Throwable throwable) {
+                        return fetchIssLocationObservable;
+                    }
+                })
+                .concatWith(pollIssLocationObservable);
     }
 
 }

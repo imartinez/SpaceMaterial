@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import javax.inject.Inject;
+
 /**
  * Controller that handles device internet connectivity.
  */
@@ -15,6 +17,7 @@ public interface ConnectivityController {
 
         private final ConnectivityManager connectivityManager;
 
+        @Inject
         public Impl(Context context) {
             connectivityManager =
                     (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);

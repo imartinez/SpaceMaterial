@@ -39,16 +39,24 @@ class IssLocationPresenter extends BasePresenterImpl<IssLocationView, IssLocatio
     }
 
     public void onMapReady() {
+        getIssLocation();
+    }
+
+    public void onRetrySelected() {
+        getIssLocation();
+    }
+
+    private void getIssLocation() {
         track(getIssLocationInteractor.getIssLocation()
                 .subscribeOn(Schedulers.io())
                 .observeOn(uiScheduler)
                 .subscribe(new Subscriber<IssLocation>() {
+                    // TODO: 2/11/16 Is there any subscriber with an empty default implementation of onCompleted?
                     @Override
                     public void onCompleted() {}
 
                     @Override
                     public void onError(Throwable e) {
-                        // TODO: 26/10/16 Inform of error
                         getView().presentIssRetrievalError();
                     }
 
