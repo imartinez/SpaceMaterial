@@ -14,8 +14,6 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import imartinez.com.spacematerial.isslocation.IssLocationFragment;
-import imartinez.com.spacematerial.net.RetrofitFactory;
-import javax.inject.Inject;
 
 import static butterknife.ButterKnife.findById;
 import static imartinez.com.spacematerial.R.id.bottom_navigation_view;
@@ -26,17 +24,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int PEOPLE_IN_SPACE_FRAGMENT_POSITION = 1;
     private static final int ISS_PASS_TIMES_FRAGMENT_POSITION = 2;
 
-    @Inject
-    RetrofitFactory retrofitFactory;
-
     @BindView(R.id.content_view_pager)
     ViewPager contentViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((App) getApplication()).getAppComponent().inject(this);
-
-        retrofitFactory.toString();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -75,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         private static final int NUM_ITEMS = 3;
 
-        public MainPagerAdapter(FragmentManager fm) {
+        private MainPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

@@ -22,7 +22,7 @@ class GetIssLocationInteractor {
     /**
      * Get cached ISS location from disk cache.
      */
-    private Observable<IssLocation> getCachedIssLocationObservable =
+    private final Observable<IssLocation> getCachedIssLocationObservable =
             Observable.fromCallable(new Callable<IssLocation>() {
                 @Override
                 public IssLocation call() throws Exception {
@@ -33,7 +33,7 @@ class GetIssLocationInteractor {
     /**
      * Fetch ISS location from server.
      */
-    private Observable<IssLocation> fetchIssLocationObservable =
+    private final Observable<IssLocation> fetchIssLocationObservable =
             Observable.fromCallable(new Callable<IssLocation>() {
                 @Override
                 public IssLocation call() throws Exception {
@@ -45,7 +45,7 @@ class GetIssLocationInteractor {
      * Polling of ISS location. If the server fails a certain number of times,
      * send onError signal and stop polling.
      */
-    private Observable<IssLocation> pollIssLocationObservable =
+    private final Observable<IssLocation> pollIssLocationObservable =
             Observable.interval(LOCATION_POLLING_INTERVAL_SECONDS, TimeUnit.SECONDS)
                     .flatMap(new Func1<Long, Observable<IssLocation>>() {
                         @Override
@@ -56,7 +56,7 @@ class GetIssLocationInteractor {
                     .retry(MAX_RETRIES_ON_SERVER_FAILURE);
 
     @Inject
-    public GetIssLocationInteractor(IssLocationNetworkController issLocationNetworkController) {
+    GetIssLocationInteractor(IssLocationNetworkController issLocationNetworkController) {
         this.issLocationNetworkController = issLocationNetworkController;
     }
 
@@ -66,7 +66,7 @@ class GetIssLocationInteractor {
      * If there is a cached location or the server responds with valid data,
      * start polling the server.
      */
-    public Observable<IssLocation> getIssLocation() {
+    Observable<IssLocation> getIssLocation() {
         return getCachedIssLocationObservable
                 .onErrorResumeNext(new Func1<Throwable, Observable<IssLocation>>() {
                     @Override

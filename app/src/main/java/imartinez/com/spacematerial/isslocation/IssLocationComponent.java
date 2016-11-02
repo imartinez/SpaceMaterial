@@ -9,12 +9,6 @@ import imartinez.com.spacematerial.isslocation.IssLocationComponent.IssLocationS
 import imartinez.com.spacematerial.isslocation.IssLocationNetworkController.RetrofitImpl;
 import javax.inject.Scope;
 
-/**
- *
- * TODO: Add class description.
- *
- * Created on 26/10/16.
- */
 @IssLocationScope
 @Component(dependencies = AppComponent.class, modules = IssLocationModule.class)
 interface IssLocationComponent {

@@ -15,11 +15,6 @@ import javax.inject.Singleton;
 import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 
-/**
- * TODO: Add class description.
- *
- * Created on 26/10/16.
- */
 @Singleton
 @Component(modules = {AppModule.class, NetModule.class, ConnectivityModule.class})
 public interface AppComponent {

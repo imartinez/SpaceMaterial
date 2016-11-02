@@ -32,17 +32,17 @@ class IssLocationPresenter extends BasePresenterImpl<IssLocationView, IssLocatio
     private final Scheduler uiScheduler;
 
     @Inject
-    public IssLocationPresenter(GetIssLocationInteractor getIssLocationInteractor,
+    IssLocationPresenter(GetIssLocationInteractor getIssLocationInteractor,
             Scheduler uiScheduler) {
         this.getIssLocationInteractor = getIssLocationInteractor;
         this.uiScheduler = uiScheduler;
     }
 
-    public void onMapReady() {
+    void onMapReady() {
         getIssLocation();
     }
 
-    public void onRetrySelected() {
+    void onRetrySelected() {
         getIssLocation();
     }
 

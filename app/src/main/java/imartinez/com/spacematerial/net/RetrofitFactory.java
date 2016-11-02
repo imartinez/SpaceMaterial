@@ -1,12 +1,7 @@
 package imartinez.com.spacematerial.net;
 
 import com.google.gson.GsonBuilder;
-
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
-
 import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -17,6 +12,9 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
 /**
  * TODO: Add class description.
  * TODO ServiceFactory is the proper name?
@@ -25,9 +23,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitFactory {
 
-    public static final String CACHE_CONTROL = "Cache-Control";
+    private static final String CACHE_CONTROL = "Cache-Control";
     private static final int FORCED_CACHE_MAX_STALE_DAYS = 7; // tolerate 1-week stale
-    public static final int BASIC_CACHE_MAX_AGE_SECONDS = 5; // basic cache seconds
+    private static final int BASIC_CACHE_MAX_AGE_SECONDS = 5; // basic cache seconds
 
     private final String baseUrl;
     private final GsonConverterFactory gsonConverterFactory;

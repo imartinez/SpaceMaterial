@@ -18,7 +18,7 @@ public interface ConnectivityController {
         private final ConnectivityManager connectivityManager;
 
         @Inject
-        public Impl(Context context) {
+        Impl(Context context) {
             connectivityManager =
                     (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         }

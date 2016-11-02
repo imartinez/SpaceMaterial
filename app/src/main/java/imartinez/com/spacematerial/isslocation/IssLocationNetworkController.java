@@ -17,14 +17,13 @@ interface IssLocationNetworkController {
         private final IssLocationApi cacheService;
 
         @Inject
-        public RetrofitImpl(RetrofitFactory retrofitFactory) {
+        RetrofitImpl(RetrofitFactory retrofitFactory) {
             networkService = retrofitFactory.create(IssLocationApi.class);
             cacheService = retrofitFactory.createCacheOnly(IssLocationApi.class);
         }
 
         @Override
         public IssLocation getCachedIssLocation() throws IOException {
-            // TODO: 23/10/16 Control network error?
             IssLocationApiResponse serviceResponse = cacheService.fetchIssLocation().execute().body();
 
             if (serviceResponse == null) {
@@ -40,7 +39,6 @@ interface IssLocationNetworkController {
 
         @Override
         public IssLocation fetchIssLocation() throws IOException {
-            // TODO: 23/10/16 Control network error?
             IssLocationApiResponse serviceResponse = networkService.fetchIssLocation().execute().body();
             return IssLocation.builder()
                     .setTimestamp(serviceResponse.timestamp())

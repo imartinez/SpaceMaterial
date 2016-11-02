@@ -7,12 +7,6 @@ import dagger.Provides;
 import javax.inject.Singleton;
 import okhttp3.Cache;
 
-/**
- *
- * TODO: Add class description.
- *
- * Created on 26/10/16.
- */
 @Module
 public class NetModule {
 
