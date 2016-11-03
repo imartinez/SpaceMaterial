@@ -1,13 +1,25 @@
 # SpaceMaterial
 Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI...) and Material design. It makes use of http://wheretheiss.at/ API
 
-# FEATURES OF THE APP (WIP)
+# USED IN THE APP (WIP)
 - auto-value and auto-value-gson
-- logging-interceptor
-- okhttp with cache-first strategy
+- OkHttp logging-interceptor
+- Retrofit 2 + OkHttp 3 with cache-only and network-only strategies
 - Bottom Navigation View from the Design Support Library
-- Dagger 2 with dependant components and proper visibilities
+- Dagger 2 with dependant components
+- MPV+R(Router)
+- RxJava (only in Interactors layer) implementing cool strategies (cache first, polling, offline mode)
+- Proper code organization in packages and proper classes visibility
+- Butterknife
 
-# TODO (WIP)
-- Add splash screen
-- Review visibility of every class.
+# TO USE IN THE APP
+- Timber
+- Material transitions
+- Vector animations
+- Functional approach where possible
+- Unit tests (DaggerMock?)
+- Instrumentation tests
+- Volley
+- Proguard
+- pedrogvs/Renderers
+- ...
