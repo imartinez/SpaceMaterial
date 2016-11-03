@@ -42,11 +42,11 @@ class GetIssLocationInteractor {
             });
 
     /**
-     * Polling of ISS location. If the server fails a certain number of times,
+     * Polling of ISS location (starting immediately). If the server fails a certain number of times,
      * send onError signal and stop polling.
      */
     private final Observable<IssLocation> pollIssLocationObservable =
-            Observable.interval(LOCATION_POLLING_INTERVAL_SECONDS, TimeUnit.SECONDS)
+            Observable.interval(0, LOCATION_POLLING_INTERVAL_SECONDS, TimeUnit.SECONDS)
                     .flatMap(new Func1<Long, Observable<IssLocation>>() {
                         @Override
                         public Observable<IssLocation> call(Long aLong) {
