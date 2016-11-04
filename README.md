@@ -4,7 +4,7 @@ Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI.
 - http://www.howmanypeopleareinspacerightnow.com/peopleinspace.json API
 
 # USED IN THE APP (WIP)
-- auto-value and auto-value-gson
+- auto-value and auto-value-gson. Immutable objects.
 - OkHttp logging-interceptor
 - Retrofit 2 + OkHttp 3 with cache-only and network-only strategies
 - Bottom Navigation View from the Design Support Library
