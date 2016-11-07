@@ -1,8 +1,9 @@
 package imartinez.com.spacematerial.isslocation;
 
+import io.reactivex.Flowable;
+import io.reactivex.functions.Function;
 import javax.inject.Inject;
-import rx.Observable;
-import rx.functions.Func1;
+import org.reactivestreams.Publisher;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -22,8 +23,8 @@ class GetIssLocationInteractor {
     /**
      * Get cached ISS location from disk cache.
      */
-    private final Observable<IssLocation> getCachedIssLocationObservable =
-            Observable.fromCallable(new Callable<IssLocation>() {
+    private final Flowable<IssLocation> getCachedIssLocationFlowable =
+            Flowable.fromCallable(new Callable<IssLocation>() {
                 @Override
                 public IssLocation call() throws Exception {
                     return issLocationNetworkController.getCachedIssLocation();
@@ -33,8 +34,8 @@ class GetIssLocationInteractor {
     /**
      * Fetch ISS location from server.
      */
-    private final Observable<IssLocation> fetchIssLocationObservable =
-            Observable.fromCallable(new Callable<IssLocation>() {
+    private final Flowable<IssLocation> fetchIssLocationFlowable =
+            Flowable.fromCallable(new Callable<IssLocation>() {
                 @Override
                 public IssLocation call() throws Exception {
                     return issLocationNetworkController.fetchIssLocation();
@@ -42,15 +43,16 @@ class GetIssLocationInteractor {
             });
 
     /**
-     * Polling of ISS location (starting immediately). If the server fails a certain number of times,
+     * Polling of ISS location (starting immediately). If the server fails a certain number of
+     * times,
      * send onError signal and stop polling.
      */
-    private final Observable<IssLocation> pollIssLocationObservable =
-            Observable.interval(0, LOCATION_POLLING_INTERVAL_SECONDS, TimeUnit.SECONDS)
-                    .flatMap(new Func1<Long, Observable<IssLocation>>() {
+    private final Flowable<IssLocation> pollIssLocationFlowable =
+            Flowable.interval(0, LOCATION_POLLING_INTERVAL_SECONDS, TimeUnit.SECONDS)
+                    .flatMap(new Function<Long, Publisher<IssLocation>>() {
                         @Override
-                        public Observable<IssLocation> call(Long aLong) {
-                            return fetchIssLocationObservable;
+                        public Publisher<IssLocation> apply(Long aLong) throws Exception {
+                            return fetchIssLocationFlowable;
                         }
                     })
                     .retry(MAX_RETRIES_ON_SERVER_FAILURE);
@@ -66,15 +68,9 @@ class GetIssLocationInteractor {
      * If there is a cached location or the server responds with valid data,
      * start polling the server.
      */
-    Observable<IssLocation> getIssLocation() {
-        return getCachedIssLocationObservable
-                .onErrorResumeNext(new Func1<Throwable, Observable<IssLocation>>() {
-                    @Override
-                    public Observable<IssLocation> call(Throwable throwable) {
-                        return fetchIssLocationObservable;
-                    }
-                })
-                .concatWith(pollIssLocationObservable);
+    Flowable<IssLocation> getIssLocation() {
+        return getCachedIssLocationFlowable
+                .onErrorResumeNext(fetchIssLocationFlowable)
+                .concatWith(pollIssLocationFlowable);
     }
-
 }

@@ -4,10 +4,10 @@ import imartinez.com.spacematerial.base.BasePresenter;
 import imartinez.com.spacematerial.base.BasePresenterImpl;
 import imartinez.com.spacematerial.isslocation.IssLocationPresenter.IssLocationRouter;
 import imartinez.com.spacematerial.isslocation.IssLocationPresenter.IssLocationView;
+import io.reactivex.Scheduler;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import javax.inject.Inject;
-import rx.Scheduler;
-import rx.Subscriber;
-import rx.schedulers.Schedulers;
 
 /**
  *
@@ -50,19 +50,15 @@ class IssLocationPresenter extends BasePresenterImpl<IssLocationView, IssLocatio
         track(getIssLocationInteractor.getIssLocation()
                 .subscribeOn(Schedulers.io())
                 .observeOn(uiScheduler)
-                .subscribe(new Subscriber<IssLocation>() {
-                    // TODO: 2/11/16 Is there any subscriber with an empty default implementation of onCompleted?
+                .subscribe(new Consumer<IssLocation>() {
                     @Override
-                    public void onCompleted() {}
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getView().presentIssRetrievalError();
-                    }
-
-                    @Override
-                    public void onNext(IssLocation issLocation) {
+                    public void accept(IssLocation issLocation) throws Exception {
                         getView().presentIssLocation(issLocation);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        getView().presentIssRetrievalError();
                     }
                 })
         );

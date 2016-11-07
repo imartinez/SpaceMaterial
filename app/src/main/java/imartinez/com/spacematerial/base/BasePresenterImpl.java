@@ -1,24 +1,23 @@
 package imartinez.com.spacematerial.base;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import org.jetbrains.annotations.NotNull;
-
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
 
 public abstract class BasePresenterImpl<V, R> implements BasePresenter<V, R> {
 
     private V view;
     private R router;
-    private CompositeSubscription compositeSubscription;
+    private CompositeDisposable compositeDisposable;
 
     @Override
     public void onViewReady() {
-        cancelSubscriptions();
+        disposeTracked();
     }
 
     @Override
     public void onViewDestroyed() {
-        cancelSubscriptions();
+        disposeTracked();
     }
 
     @Override
@@ -50,18 +49,18 @@ public abstract class BasePresenterImpl<V, R> implements BasePresenter<V, R> {
     }
 
     @Override
-    public void track(Subscription subscription) {
-        if (compositeSubscription == null)
-            throw new NullPointerException("Can't track a subscription outside view lifecycle");
+    public void track(Disposable disposable) {
+        if (compositeDisposable == null)
+            throw new NullPointerException("Can't track a disposable outside view lifecycle");
 
-        compositeSubscription.add(subscription);
+        compositeDisposable.add(disposable);
     }
 
     @Override
-    public void cancelSubscriptions() {
-        if (compositeSubscription != null) {
-            compositeSubscription.unsubscribe();
+    public void disposeTracked() {
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
         }
-        compositeSubscription = new CompositeSubscription();
+        compositeDisposable = new CompositeDisposable();
     }
 }

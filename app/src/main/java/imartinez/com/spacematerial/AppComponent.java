@@ -11,9 +11,9 @@ import imartinez.com.spacematerial.connectivity.ConnectivityController;
 import imartinez.com.spacematerial.connectivity.ConnectivityModule;
 import imartinez.com.spacematerial.net.NetModule;
 import imartinez.com.spacematerial.net.RetrofitFactory;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import javax.inject.Singleton;
-import rx.Scheduler;
-import rx.android.schedulers.AndroidSchedulers;
 
 @Singleton
 @Component(modules = {AppModule.class, NetModule.class, ConnectivityModule.class})

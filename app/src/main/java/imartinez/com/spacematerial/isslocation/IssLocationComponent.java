@@ -28,7 +28,6 @@ interface IssLocationComponent {
                 RetrofitImpl retrofitNetworkController) {
             return retrofitNetworkController;
         }
-
     }
 
 }

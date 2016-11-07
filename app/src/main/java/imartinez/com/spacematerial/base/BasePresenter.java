@@ -1,6 +1,6 @@
 package imartinez.com.spacematerial.base;
 
-import rx.Subscription;
+import io.reactivex.disposables.Disposable;
 
 public interface BasePresenter<V, R> {
 
@@ -41,15 +41,14 @@ public interface BasePresenter<V, R> {
      */
     R getRouter();
 
+    /**
+     * Attach the disposable to the view lifecycle,
+     * and dispose when it goes out of scope
+     */
+    void track(Disposable disposable);
 
     /**
-     * Attach the subscription to the view lifecycle,
-     * and unsubscribe when it goes out of scope
+     * Dispose all tracked subscriptions
      */
-    void track(Subscription subscription);
-
-    /**
-     * Unsubscribe all tracked subscriptions
-     */
-    void cancelSubscriptions();
+    void disposeTracked();
 }

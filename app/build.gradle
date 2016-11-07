@@ -50,9 +50,9 @@ dependencies {
     compile 'com.google.dagger:dagger:2.7'
     provided 'javax.annotation:jsr250-api:1.0'
 
-    // RxAndroid and RxJava
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.2.1'
+    // RxAndroid 2 and RxJava 2
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.0'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.0'
 
     // Retrofit 2 and Okhttp 3
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
