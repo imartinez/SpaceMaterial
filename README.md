@@ -14,7 +14,7 @@ Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI.
 - Proper code organization in packages and proper classes visibility
 - Butterknife
 
-# TO USE IN THE APP
+# TO DO/TO ADD IN THE APP
 - Timber
 - Material transitions
 - Vector animations
@@ -24,4 +24,5 @@ Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI.
 - Volley
 - Proguard
 - pedrogvs/Renderers
+- migrate to RxJava 2
 - ...
