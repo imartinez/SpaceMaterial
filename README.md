@@ -15,7 +15,6 @@ Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI.
 - Butterknife
 
 # TO DO/TO ADD IN THE APP
-- Retrolambda
 - Timber
 - Material transitions
 - Vector animations
