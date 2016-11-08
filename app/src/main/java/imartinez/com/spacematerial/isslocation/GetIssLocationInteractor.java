@@ -8,11 +8,6 @@ import org.reactivestreams.Publisher;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-/**
- * TODO: Add class description.
- *
- * Created on 25/10/16.
- */
 class GetIssLocationInteractor {
 
     private static final int LOCATION_POLLING_INTERVAL_SECONDS = 5;

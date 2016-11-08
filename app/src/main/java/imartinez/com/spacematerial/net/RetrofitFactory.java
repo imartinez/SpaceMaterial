@@ -146,6 +146,7 @@ public class RetrofitFactory {
     private GsonConverterFactory createAutoValueGsonConverterFactory() {
         return GsonConverterFactory.create(
                 new GsonBuilder()
+                        .setDateFormat("yyyy-MM-dd") // TODO: 8/11/16 This may be too concrete to be in such a generic component.
                         .registerTypeAdapterFactory(AutoValueGsonAdapterFactory.create())
                         .create());
     }

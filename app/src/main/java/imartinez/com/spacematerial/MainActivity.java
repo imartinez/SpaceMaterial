@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                     fragment = IssLocationFragment.newInstance();
                     break;
                 case PEOPLE_IN_SPACE_FRAGMENT_POSITION:
-                    fragment = new Fragment();
+                    fragment = PeopleInSpaceFragment.newInstance();
                     break;
                 case ISS_PASS_TIMES_FRAGMENT_POSITION:
                     fragment = new Fragment();

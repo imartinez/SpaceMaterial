@@ -9,12 +9,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import javax.inject.Inject;
 
-/**
- *
- * TODO: Add class description.
- *
- * Created on 26/10/16.
- */
 class IssLocationPresenter extends BasePresenterImpl<IssLocationView, IssLocationRouter> implements
         BasePresenter<IssLocationView, IssLocationRouter> {
 

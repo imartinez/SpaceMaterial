@@ -1,13 +1,8 @@
 package imartinez.com.spacematerial.isslocation;
 
 import imartinez.com.spacematerial.net.RetrofitFactory;
-import okhttp3.Cache;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 
 import static org.junit.Assert.assertTrue;
 
@@ -19,16 +14,10 @@ public class IssLocationApiIntegrationTest {
 
     private IssLocationNetworkController.RetrofitImpl networkController;
 
-    @Mock
-    Cache cache;
-
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
-
     @Before
     public void setUp() throws Exception {
         // Create a real network controller that goes to network
-        networkController = new IssLocationNetworkController.RetrofitImpl(new RetrofitFactory(cache));
+        networkController = new IssLocationNetworkController.RetrofitImpl(new RetrofitFactory(null));
     }
 
     @Test

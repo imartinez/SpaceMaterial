@@ -76,6 +76,7 @@ dependencies {
 
     // Test
     testCompile 'junit:junit:4.12'
-    dependencies { testCompile "org.mockito:mockito-core:2.2.8" }
+    testCompile 'org.mockito:mockito-core:2.2.8'
+    testCompile 'com.github.fabioCollini:DaggerMock:0.6.2'
 
 }
