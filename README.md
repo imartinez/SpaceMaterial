@@ -21,7 +21,7 @@ Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI.
 - Functional approach where possible
 - Unit tests (DaggerMock?)
 - Instrumentation tests
-- Volley
+- Picasso
 - Proguard
 - pedrogvs/Renderers
 - ...
