@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import imartinez.com.spacematerial.isslocation.IssLocationFragment;
+import imartinez.com.spacematerial.peopleinspace.PeopleInSpaceFragment;
 
 import static butterknife.ButterKnife.findById;
 import static imartinez.com.spacematerial.R.id.bottom_navigation_view;
