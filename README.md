@@ -13,6 +13,7 @@ Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI.
 - RxJava 2 (used only in Presenter-Interactors layers) implementing cool strategies (cache first, polling, offline mode)
 - Proper code organization in packages and proper classes visibility
 - Butterknife
+- Palette and Picasso 
 
 # TO DO/TO ADD IN THE APP
 - Timber
@@ -21,7 +22,6 @@ Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI.
 - Functional approach where possible
 - Unit tests (DaggerMock?)
 - Instrumentation tests
-- Picasso
 - Proguard
 - pedrogvs/Renderers
 - ...
