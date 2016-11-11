@@ -66,6 +66,15 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        // Safe check to avoid calling getPresenter before the view has been fully initialized
+        if (peopleInSpacePresenter != null && peopleInSpacePresenter.isBoundToViewAndRouter()) {
+            getPresenter().onViewVisibilityChanged(isVisibleToUser);
+        }
+    }
+
+    @Override
     protected PeopleInSpacePresenter resolvePresenter() {
         peopleInSpacePresenter.bindViewAndRouter(this, this);
         return peopleInSpacePresenter;

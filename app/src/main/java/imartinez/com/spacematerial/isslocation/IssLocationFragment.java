@@ -91,8 +91,8 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        // Safe check to avoid calling getPresenter before the view has been initialized
-        if (issLocationMapView != null) {
+        // Safe check to avoid calling getPresenter before the view has been fully initialized
+        if (issLocationPresenter != null && issLocationPresenter.isBoundToViewAndRouter()) {
             getPresenter().onViewVisibilityChanged(isVisibleToUser);
         }
     }

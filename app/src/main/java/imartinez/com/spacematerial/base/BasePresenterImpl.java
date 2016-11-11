@@ -33,6 +33,11 @@ public abstract class BasePresenterImpl<V, R> implements BasePresenter<V, R> {
     }
 
     @Override
+    public boolean isBoundToViewAndRouter() {
+        return view != null && router != null;
+    }
+
+    @Override
     @NotNull
     public V getView() {
         if (view == null)

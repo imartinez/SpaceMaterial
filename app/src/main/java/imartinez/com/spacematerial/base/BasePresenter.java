@@ -32,6 +32,12 @@ public interface BasePresenter<V, R> {
     void unBindViewAndRouter();
 
     /**
+     * Check if this presenter is currently bound to a view and a router.
+     * @return boolean true if is bound to a view and a router, false otherwise.
+     */
+    boolean isBoundToViewAndRouter();
+
+    /**
      * @return the bound view. May be null if the view was unbound.
      */
     V getView();
