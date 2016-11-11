@@ -13,7 +13,8 @@ Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI.
 - RxJava 2 (used only in Presenter-Interactors layers) implementing cool strategies (cache first, polling, offline mode)
 - Proper code organization in packages and proper classes visibility
 - Butterknife
-- Palette and Picasso 
+- Android Palette (with Picasso)
+- Picasso transformations
 - Offline/Online transition management
 - DiffUtil to avoid repainting in recyclerview
 
