@@ -25,6 +25,8 @@ class IssLocationPresenter extends BasePresenterImpl<IssLocationView, IssLocatio
     private final GetIssLocationInteractor getIssLocationInteractor;
     private final Scheduler uiScheduler;
 
+    private boolean pollingPaused = false;
+
     @Inject
     IssLocationPresenter(GetIssLocationInteractor getIssLocationInteractor,
             Scheduler uiScheduler) {
@@ -36,11 +38,23 @@ class IssLocationPresenter extends BasePresenterImpl<IssLocationView, IssLocatio
         getIssLocation();
     }
 
+    void onViewVisibilityChanged(boolean isVisible) {
+        if (!isVisible) {
+            // Stop polling when the view becomes invisible
+            disposeTracked();
+            pollingPaused = true;
+        } else if (pollingPaused) {
+            // Resume pollin when the view becomes visible
+            getIssLocation();
+        }
+    }
+
     void onRetrySelected() {
         getIssLocation();
     }
 
     private void getIssLocation() {
+        // If there is not an ongoing call and the view is ready, start getting iss location
         track(getIssLocationInteractor.getIssLocation()
                 .subscribeOn(Schedulers.io())
                 .observeOn(uiScheduler)

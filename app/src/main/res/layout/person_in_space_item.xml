@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="272dp"
+    android:layout_margin="1dp">
+
+  <ImageView android:id="@+id/photo_imageview"
+      android:layout_width="match_parent"
+      android:layout_height="204dp"
+      android:background="@color/grey"
+      android:scaleType="centerCrop"/>
+
+  <FrameLayout android:layout_width="match_parent" android:layout_height="30dp"
+      android:background="@drawable/linear_gradient_black_to_transparent"/>
+
+  <TextView
+      android:id="@+id/name_textview"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@color/white"
+      android:textStyle="bold"
+      android:textAllCaps="true"
+      android:layout_centerHorizontal="true"
+      android:layout_marginTop="4dp"
+      tools:text="Andrei Borisenko"/>
+
+  <RelativeLayout
+      android:id="@+id/text_container_view"
+      android:layout_width="match_parent"
+      android:layout_height="68dp"
+      android:paddingLeft="16dp"
+      android:paddingTop="16dp"
+      android:paddingRight="8dp"
+      android:orientation="vertical"
+      android:layout_alignParentBottom="true"
+      android:layout_centerHorizontal="true"
+      android:background="@color/darkGrey">
+
+    <TextView
+        android:id="@+id/title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        tools:text="Flight Engineer"/>
+
+    <TextView
+        android:id="@+id/location_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_textview"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:maxLines="1"
+        tools:text="International Space Station"/>
+
+  </RelativeLayout>
+
+  <ImageView
+      android:id="@+id/flag_imageview"
+      android:layout_width="30dp"
+      android:layout_height="30dp"
+      tools:src="@drawable/ic_placeholder"
+      android:layout_above="@id/text_container_view"
+      android:layout_alignParentRight="true"
+      android:layout_marginBottom="4dp"
+      android:layout_marginRight="4dp"/>
+
+</RelativeLayout>

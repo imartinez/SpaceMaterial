@@ -48,7 +48,7 @@ public interface BasePresenter<V, R> {
     void track(Disposable disposable);
 
     /**
-     * Dispose all tracked subscriptions
+     * Dispose all tracked disposables
      */
     void disposeTracked();
 }

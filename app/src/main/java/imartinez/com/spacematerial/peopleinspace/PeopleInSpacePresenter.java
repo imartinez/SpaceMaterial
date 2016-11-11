@@ -40,6 +40,10 @@ class PeopleInSpacePresenter extends BasePresenterImpl<PeopleInSpaceView, People
         getPeopleInSpace();
     }
 
+    public void onPersonSelected(PersonInSpace personSelected) {
+
+    }
+
     void onRetrySelected() {
         getPeopleInSpace();
     }

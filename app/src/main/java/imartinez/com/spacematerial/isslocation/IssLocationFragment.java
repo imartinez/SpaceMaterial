@@ -1,12 +1,9 @@
 package imartinez.com.spacematerial.isslocation;
 
-import android.content.Context;
-import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,14 +29,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-/**
- * A simple {@link Fragment} subclass representing ISS location.
- * Activities that contain this fragment must implement the
- * {@link OnIssLocationUpdatedListener} interface
- * to handle interaction events.
- * Use the {@link IssLocationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
         implements IssLocationView, IssLocationRouter, OnMapReadyCallback {
 
@@ -49,7 +38,6 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
     @BindView(R.id.iss_location_map)
     MapView issLocationMapView;
 
-    private OnIssLocationUpdatedListener onIssLocationUpdateListener;
     private GoogleMap map;
     private Marker locationMarker;
 
@@ -70,7 +58,7 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_iss_location, container, false);
         ButterKnife.bind(this, view);
 
@@ -82,23 +70,30 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnIssLocationUpdatedListener) {
-            onIssLocationUpdateListener = (OnIssLocationUpdatedListener) context;
-        }
+    public void onResume() {
+        issLocationMapView.onResume();
+        getPresenter().onViewVisibilityChanged(true);
+        super.onResume();
     }
 
     @Override
-    public void onResume() {
-        issLocationMapView.onResume();
-        super.onResume();
+    public void onPause() {
+        getPresenter().onViewVisibilityChanged(false);
+        super.onPause();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        onIssLocationUpdateListener = null;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        // Safe check to avoid calling getPresenter before the view has been initialized
+        if (issLocationMapView != null) {
+            getPresenter().onViewVisibilityChanged(isVisibleToUser);
+        }
     }
 
     @Override
@@ -114,7 +109,8 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
         if (locationMarker != null) {
             locationMarker.remove();
         }
-        locationMarker = map.addMarker(new MarkerOptions().title(getString(R.string.iss_location_title)).position(latLng));
+        locationMarker = map.addMarker(
+                new MarkerOptions().title(getString(R.string.iss_location_title)).position(latLng));
         locationMarker.setSnippet(getDateCurrentTimeZone(issLocation.timestamp()));
         locationMarker.showInfoWindow();
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -138,17 +134,9 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
         getPresenter().onMapReady();
     }
 
-    /**
-     * Interface to be implemented by the host activity. Used by the fragment
-     * to inform the activity that a new location has been represented.
-     */
-    public interface OnIssLocationUpdatedListener {
-        void onIssLocationUpdated();
-    }
-
     // TODO: 1/11/16 Take this function to DateUtils. Review the function implementation
-    public  String getDateCurrentTimeZone(long timestamp) {
-        try{
+    public String getDateCurrentTimeZone(long timestamp) {
+        try {
             Calendar calendar = Calendar.getInstance();
             TimeZone tz = TimeZone.getDefault();
             calendar.setTimeInMillis(timestamp * 1000);
@@ -156,7 +144,7 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date currenTimeZone = (Date) calendar.getTime();
             return sdf.format(currenTimeZone);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return "";
         }
     }
