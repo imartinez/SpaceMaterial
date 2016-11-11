@@ -37,6 +37,8 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
     @BindView(R.id.people_in_space_recyclerview)
     RecyclerView recyclerView;
 
+    private Snackbar errorSnackbar;
+
     public static PeopleInSpaceFragment newInstance() {
         PeopleInSpaceFragment fragment = new PeopleInSpaceFragment();
         return fragment;
@@ -71,20 +73,23 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
 
     @Override
     public void presentPeopleInSpace(List<PersonInSpace> peopleInSpace) {
+        if (errorSnackbar != null && errorSnackbar.isShown()) {
+            errorSnackbar.dismiss();
+        }
         // TODO: 11/11/16 check if has changed to avoid re-painting
         recyclerView.setAdapter(new PersonInSpaceRecyclerViewAdapter(peopleInSpace));
     }
 
     @Override
     public void presentPeopleInSpaceRetrievalError() {
-        Snackbar.make(getView(), R.string.error_fetching_people_in_space, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.retry, new OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        getPresenter().onRetrySelected();
-                    }
-                })
-                .show();
+        errorSnackbar = Snackbar.make(getView(), R.string.error_fetching_people_in_space,
+                Snackbar.LENGTH_INDEFINITE).setAction(R.string.retry, new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getPresenter().onRetrySelected();
+            }
+        });
+        errorSnackbar.show();
     }
 
     class PersonInSpaceRecyclerViewAdapter
@@ -116,25 +121,23 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
                 int position) {
             holder.item = peopleInSpace.get(position);
             // Load small circular flag with Picasso
-            Picasso.with(getContext())
-                    .load(holder.item.countryFlagImageUrl())
+            Picasso.with(getContext()).load(holder.item.countryFlagImageUrl())
                     // With a circular placeholder
-                    .placeholder(R.drawable.ic_placeholder) // TODO: 11/11/16 change placeholder image
+                    .placeholder(
+                            R.drawable.ic_placeholder) // TODO: 11/11/16 change placeholder image
                     // Adjusting image size
                     .fit()
                     // Applying circle transformation to images
-                    .transform(new PicassoCircleTransform())
-                    .into(holder.flagImageView);
+                    .transform(new PicassoCircleTransform()).into(holder.flagImageView);
             // Load photo using Picasso, and set text container background using Palette.
             Picasso.with(getContext())
                     .load(holder.item.bioPhotoImageUrl())
                     // transformation to scale down image and reduce memory consumption
                     .transform(new PicassoBitmapTransform(IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT))
-                    .into(holder.photoImageView,
-                            PicassoPalette.with(holder.item.bioPhotoImageUrl(), holder.photoImageView)
-                                    .use(Profile.VIBRANT)
-                                    .intoBackground(holder.textContainerView)
-                    );
+                    .into(holder.photoImageView, PicassoPalette.with(holder.item.bioPhotoImageUrl(),
+                            holder.photoImageView)
+                            .use(Profile.VIBRANT)
+                            .intoBackground(holder.textContainerView));
 
             holder.nameTextView.setText(holder.item.name());
             holder.titleTextView.setText(holder.item.title());

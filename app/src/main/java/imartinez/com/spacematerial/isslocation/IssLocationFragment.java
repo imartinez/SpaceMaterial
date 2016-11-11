@@ -40,6 +40,7 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
 
     private GoogleMap map;
     private Marker locationMarker;
+    private Snackbar errorSnackbar;
 
     public static IssLocationFragment newInstance() {
         IssLocationFragment fragment = new IssLocationFragment();
@@ -104,6 +105,9 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
 
     @Override
     public void presentIssLocation(IssLocation issLocation) {
+        if (errorSnackbar != null && errorSnackbar.isShown()) {
+            errorSnackbar.dismiss();
+        }
         // Add a marker in ISS location and move the camera
         LatLng latLng = new LatLng(issLocation.latitude(), issLocation.longitude());
         if (locationMarker != null) {
@@ -118,14 +122,14 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
 
     @Override
     public void presentIssRetrievalError() {
-        Snackbar.make(getView(), R.string.error_fetching_iss_location, Snackbar.LENGTH_INDEFINITE)
+        errorSnackbar = Snackbar.make(getView(), R.string.error_fetching_iss_location, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.retry, new OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         getPresenter().onRetrySelected();
                     }
-                })
-                .show();
+                });
+        errorSnackbar.show();
     }
 
     @Override
