@@ -15,6 +15,7 @@ Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI.
 - Butterknife
 - Palette and Picasso 
 - Offline/Online transition management
+- DiffUtil to avoid repainting in recyclerview
 
 # TO DO/TO ADD IN THE APP
 - Timber
