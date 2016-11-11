@@ -14,6 +14,7 @@ Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI.
 - Proper code organization in packages and proper classes visibility
 - Butterknife
 - Palette and Picasso 
+- Offline/Online transition management
 
 # TO DO/TO ADD IN THE APP
 - Timber
