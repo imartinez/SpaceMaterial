@@ -6,7 +6,7 @@ Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI.
 # USED IN THE APP (WIP)
 - auto-value and auto-value-gson. Immutable objects.
 - OkHttp logging-interceptor
-- Retrofit 2 (with RxJava) + OkHttp 3 with cache-only and network-only strategies
+- Retrofit 2 (with RxJava 1) + OkHttp 3 with cache-only and network-only strategies
 - Bottom Navigation View from the Design Support Library
 - Dagger 2 with dependant components
 - MPV+R(Router)
