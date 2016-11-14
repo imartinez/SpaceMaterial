@@ -1,9 +1,10 @@
 package imartinez.com.spacematerial.isslocation;
 
 import io.reactivex.Flowable;
+import io.reactivex.Single;
+import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
 import javax.inject.Inject;
-import org.reactivestreams.Publisher;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -18,8 +19,8 @@ class GetIssLocationInteractor {
     /**
      * Get cached ISS location from disk cache.
      */
-    private final Flowable<IssLocation> getCachedIssLocationFlowable =
-            Flowable.fromCallable(new Callable<IssLocation>() {
+    private final Single<IssLocation> getCachedIssLocationFlowable =
+            Single.fromCallable(new Callable<IssLocation>() {
                 @Override
                 public IssLocation call() throws Exception {
                     return issLocationNetworkController.getCachedIssLocation();
@@ -29,8 +30,8 @@ class GetIssLocationInteractor {
     /**
      * Fetch ISS location from server.
      */
-    private final Flowable<IssLocation> fetchIssLocationFlowable =
-            Flowable.fromCallable(new Callable<IssLocation>() {
+    private final Single<IssLocation> fetchIssLocationFlowable =
+            Single.fromCallable(new Callable<IssLocation>() {
                 @Override
                 public IssLocation call() throws Exception {
                     return issLocationNetworkController.fetchIssLocation();
@@ -44,9 +45,9 @@ class GetIssLocationInteractor {
      */
     private final Flowable<IssLocation> pollIssLocationFlowable =
             Flowable.interval(0, LOCATION_POLLING_INTERVAL_SECONDS, TimeUnit.SECONDS)
-                    .flatMap(new Function<Long, Publisher<IssLocation>>() {
+                    .flatMapSingle(new Function<Long, SingleSource<IssLocation>>() {
                         @Override
-                        public Publisher<IssLocation> apply(Long aLong) throws Exception {
+                        public SingleSource<IssLocation> apply(Long aLong) throws Exception {
                             return fetchIssLocationFlowable;
                         }
                     })
@@ -66,6 +67,7 @@ class GetIssLocationInteractor {
     Flowable<IssLocation> getIssLocation() {
         return getCachedIssLocationFlowable
                 .onErrorResumeNext(fetchIssLocationFlowable)
+                .toFlowable()
                 .concatWith(pollIssLocationFlowable);
     }
 }

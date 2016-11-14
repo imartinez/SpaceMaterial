@@ -11,6 +11,7 @@ import io.reactivex.schedulers.Schedulers;
 import javax.inject.Inject;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 class PeopleInSpacePresenter extends BasePresenterImpl<PeopleInSpaceView, PeopleInSpaceRouter>
         implements BasePresenter<PeopleInSpaceView, PeopleInSpaceRouter> {
@@ -23,6 +24,8 @@ class PeopleInSpacePresenter extends BasePresenterImpl<PeopleInSpaceView, People
     interface PeopleInSpaceRouter {
 
     }
+
+    private static final int VIEW_UPDATE_MAX_RATE_MILLIS = 200;
 
     private final ConnectivityController connectivityController;
     private final GetPeopleInSpaceInteractor getPeopleInSpaceInteractor;
@@ -74,6 +77,7 @@ class PeopleInSpacePresenter extends BasePresenterImpl<PeopleInSpaceView, People
 
     private void getPeopleInSpace() {
         track(getPeopleInSpaceInteractor.getPeopleInSpace()
+                .throttleLast(VIEW_UPDATE_MAX_RATE_MILLIS, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(uiScheduler)
                 .subscribe(new Consumer<List<PersonInSpace>>() {

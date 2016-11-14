@@ -10,6 +10,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import javax.inject.Inject;
 
+import java.util.concurrent.TimeUnit;
+
 class IssLocationPresenter extends BasePresenterImpl<IssLocationView, IssLocationRouter>
         implements BasePresenter<IssLocationView, IssLocationRouter> {
 
@@ -23,6 +25,8 @@ class IssLocationPresenter extends BasePresenterImpl<IssLocationView, IssLocatio
     interface IssLocationRouter {
 
     }
+
+    private static final int VIEW_UPDATE_MAX_RATE_MILLIS = 200;
 
     private final ConnectivityController connectivityController;
     private final GetIssLocationInteractor getIssLocationInteractor;
@@ -76,6 +80,7 @@ class IssLocationPresenter extends BasePresenterImpl<IssLocationView, IssLocatio
     private void getIssLocation() {
         // If there is not an ongoing call and the view is ready, start getting iss location
         track(getIssLocationInteractor.getIssLocation()
+                .throttleLast(VIEW_UPDATE_MAX_RATE_MILLIS, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(uiScheduler)
                 .subscribe(new Consumer<IssLocation>() {
