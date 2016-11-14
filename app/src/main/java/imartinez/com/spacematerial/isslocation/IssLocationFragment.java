@@ -79,6 +79,7 @@ public class IssLocationFragment extends BaseCleanFragment<IssLocationPresenter>
 
     @Override
     public void onPause() {
+        issLocationMapView.onPause();
         getPresenter().onViewVisibilityChanged(false);
         super.onPause();
     }
