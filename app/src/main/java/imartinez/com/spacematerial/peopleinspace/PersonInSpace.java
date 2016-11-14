@@ -2,10 +2,11 @@ package imartinez.com.spacematerial.peopleinspace;
 
 import com.google.auto.value.AutoValue;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @AutoValue
-abstract class PersonInSpace {
+abstract class PersonInSpace implements Serializable {
 
     abstract String name();
     abstract String bioPhotoImageUrl();

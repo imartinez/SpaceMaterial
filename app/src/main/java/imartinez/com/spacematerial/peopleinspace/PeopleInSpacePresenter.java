@@ -22,7 +22,7 @@ class PeopleInSpacePresenter extends BasePresenterImpl<PeopleInSpaceView, People
     }
 
     interface PeopleInSpaceRouter {
-
+        void showPersonInSpaceDetail(PersonInSpace personInSpace);
     }
 
     private static final int VIEW_UPDATE_MAX_RATE_MILLIS = 200;
@@ -47,7 +47,7 @@ class PeopleInSpacePresenter extends BasePresenterImpl<PeopleInSpaceView, People
     }
 
     public void onPersonSelected(PersonInSpace personSelected) {
-
+        getRouter().showPersonInSpaceDetail(personSelected);
     }
 
     void onViewVisibilityChanged(boolean isVisible) {

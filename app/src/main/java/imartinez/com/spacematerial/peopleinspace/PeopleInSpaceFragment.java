@@ -1,5 +1,6 @@
 package imartinez.com.spacematerial.peopleinspace;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,7 @@ import imartinez.com.spacematerial.base.BaseCleanFragment;
 import imartinez.com.spacematerial.peopleinspace.PeopleInSpacePresenter.PeopleInSpaceRouter;
 import imartinez.com.spacematerial.peopleinspace.PeopleInSpacePresenter.PeopleInSpaceView;
 import imartinez.com.spacematerial.peopleinspace.PersonInSpaceRecyclerViewAdapter.OnPersonSelectedListener;
+import imartinez.com.spacematerial.routing.DetailFragmentLoader;
 import javax.inject.Inject;
 
 import java.util.List;
@@ -30,6 +32,8 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
 
     @BindView(R.id.people_in_space_recyclerview)
     RecyclerView recyclerView;
+
+    private DetailFragmentLoader detailFragmentLoader;
 
     private PersonInSpaceRecyclerViewAdapter adapter;
     private Snackbar errorSnackbar;
@@ -68,6 +72,22 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
         return view;
     }
 
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // This makes sure that the container activity has implemented
+        // DetailFragmentLoader. If not, it throws an exception
+        try {
+            detailFragmentLoader = (DetailFragmentLoader) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement DetailFragmentLoader");
+        }
+    }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -101,5 +121,11 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
             }
         });
         errorSnackbar.show();
+    }
+
+    @Override
+    public void showPersonInSpaceDetail(final PersonInSpace personInSpace) {
+        detailFragmentLoader.loadDetailFragment(
+                        PersonInSpaceDetailFragment.newInstance(personInSpace));
     }
 }

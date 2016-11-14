@@ -1,0 +1,13 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="imartinez.com.spacematerial.peopleinspace.PersonInSpaceDetailFragment">
+
+  <TextView
+      android:id="@+id/person_in_space_detail_name_textview"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
+
+</FrameLayout>
