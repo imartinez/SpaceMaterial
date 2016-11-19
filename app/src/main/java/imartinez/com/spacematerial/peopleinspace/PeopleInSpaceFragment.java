@@ -1,15 +1,18 @@
 package imartinez.com.spacematerial.peopleinspace;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,7 +22,6 @@ import imartinez.com.spacematerial.base.BaseCleanFragment;
 import imartinez.com.spacematerial.peopleinspace.PeopleInSpacePresenter.PeopleInSpaceRouter;
 import imartinez.com.spacematerial.peopleinspace.PeopleInSpacePresenter.PeopleInSpaceView;
 import imartinez.com.spacematerial.peopleinspace.PersonInSpaceRecyclerViewAdapter.OnPersonSelectedListener;
-import imartinez.com.spacematerial.routing.DetailFragmentLoader;
 import javax.inject.Inject;
 
 import java.util.List;
@@ -33,10 +35,9 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
     @BindView(R.id.people_in_space_recyclerview)
     RecyclerView recyclerView;
 
-    private DetailFragmentLoader detailFragmentLoader;
-
     private PersonInSpaceRecyclerViewAdapter adapter;
     private Snackbar errorSnackbar;
+    private ImageView selectedPhotoImageView;
 
     public static PeopleInSpaceFragment newInstance() {
         PeopleInSpaceFragment fragment = new PeopleInSpaceFragment();
@@ -63,29 +64,14 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
         adapter = new PersonInSpaceRecyclerViewAdapter(getContext());
         adapter.setOnPersonSelectedListener(new OnPersonSelectedListener() {
             @Override
-            public void onPersonSelected(PersonInSpace personSelected) {
+            public void onPersonSelected(PersonInSpace personSelected, ImageView selectedPhotoImageView) {
+                PeopleInSpaceFragment.this.selectedPhotoImageView = selectedPhotoImageView;
                 getPresenter().onPersonSelected(personSelected);
             }
         });
         recyclerView.setAdapter(adapter);
 
         return view;
-    }
-
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        // This makes sure that the container activity has implemented
-        // DetailFragmentLoader. If not, it throws an exception
-        try {
-            detailFragmentLoader = (DetailFragmentLoader) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement DetailFragmentLoader");
-        }
     }
 
     @Override
@@ -125,7 +111,11 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
 
     @Override
     public void showPersonInSpaceDetail(final PersonInSpace personInSpace) {
-        detailFragmentLoader.loadDetailFragment(
-                        PersonInSpaceDetailFragment.newInstance(personInSpace));
+        Intent intent = new Intent(getActivity(), PersonInSpaceDetailActivity.class);
+// Pass data object in the bundle and populate details activity.
+        intent.putExtra(PersonInSpaceDetailActivity.PERSON_IN_SPACE_EXTRA, personInSpace);
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(getActivity(), selectedPhotoImageView, "person_in_space_detail_photo_imageview");
+        startActivity(intent, options.toBundle());
     }
 }

@@ -15,12 +15,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import imartinez.com.spacematerial.isslocation.IssLocationFragment;
 import imartinez.com.spacematerial.peopleinspace.PeopleInSpaceFragment;
-import imartinez.com.spacematerial.routing.DetailFragmentLoader;
 
 import static butterknife.ButterKnife.findById;
 import static imartinez.com.spacematerial.R.id.bottom_navigation_view;
 
-public class MainActivity extends AppCompatActivity implements DetailFragmentLoader {
+public class MainActivity extends AppCompatActivity {
 
     private static final int ISS_LOCATION_FRAGMENT_POSITION = 0;
     private static final int PEOPLE_IN_SPACE_FRAGMENT_POSITION = 1;
@@ -64,14 +63,6 @@ public class MainActivity extends AppCompatActivity implements DetailFragmentLoa
         // ViewPager
         FragmentPagerAdapter mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         contentViewPager.setAdapter(mainPagerAdapter);
-    }
-
-    @Override
-    public void loadDetailFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.detail_fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
     }
 
     private static class MainPagerAdapter extends FragmentPagerAdapter {

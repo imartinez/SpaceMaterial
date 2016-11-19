@@ -35,7 +35,7 @@ class PersonInSpaceRecyclerViewAdapter
     private OnPersonSelectedListener onPersonSelectedListener;
 
     interface OnPersonSelectedListener {
-        void onPersonSelected(PersonInSpace personSelected);
+        void onPersonSelected(PersonInSpace personSelected, ImageView selectedPhotoImageView);
     }
 
     PersonInSpaceRecyclerViewAdapter(Context context) {
@@ -70,6 +70,9 @@ class PersonInSpaceRecyclerViewAdapter
                                 .use(Profile.VIBRANT)
                                 .intoBackground(holder.textContainerView));
 
+        // Set unique transition name to each photo imageView
+        holder.photoImageView.setTransitionName("photoImageView" + position);
+
         holder.nameTextView.setText(holder.item.name());
         holder.titleTextView.setText(holder.item.title());
         holder.locationTextView.setText(holder.item.location());
@@ -79,7 +82,7 @@ class PersonInSpaceRecyclerViewAdapter
             @Override
             public void onClick(View v) {
                 if (onPersonSelectedListener != null) {
-                    onPersonSelectedListener.onPersonSelected(holder.item);
+                    onPersonSelectedListener.onPersonSelected(holder.item, holder.photoImageView);
                 }
             }
         });

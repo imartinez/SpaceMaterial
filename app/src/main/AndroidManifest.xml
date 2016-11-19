@@ -8,7 +8,7 @@
     <!-- Maps needs OpenGL ES 2 -->
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true"/>
+        android:required="true" />
 
     <application
         android:name=".App"
@@ -21,8 +21,7 @@
         <!-- Google Maps -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_api_key"
-            />
+            android:value="@string/google_maps_api_key" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -30,6 +29,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".peopleinspace.PersonInSpaceDetailActivity"
+            android:label="@string/title_activity_person_in_space_detail"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="imartinez.com.spacematerial.MainActivity" />
         </activity>
     </application>
 

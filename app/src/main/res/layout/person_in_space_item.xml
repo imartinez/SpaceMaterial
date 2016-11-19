@@ -10,7 +10,7 @@
       android:layout_width="match_parent"
       android:layout_height="204dp"
       android:background="@color/grey"
-      android:scaleType="centerCrop"/>
+      android:scaleType="centerCrop" />
 
   <FrameLayout android:layout_width="match_parent" android:layout_height="30dp"
       android:background="@drawable/linear_gradient_black_to_transparent"/>
