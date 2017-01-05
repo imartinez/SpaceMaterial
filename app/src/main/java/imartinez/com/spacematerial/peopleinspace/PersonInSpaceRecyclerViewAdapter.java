@@ -35,7 +35,8 @@ class PersonInSpaceRecyclerViewAdapter
     private OnPersonSelectedListener onPersonSelectedListener;
 
     interface OnPersonSelectedListener {
-        void onPersonSelected(PersonInSpace personSelected, ImageView selectedPhotoImageView);
+        void onPersonSelected(PersonInSpace personSelected, ImageView selectedPhotoImageView,
+                View selectedContentView);
     }
 
     PersonInSpaceRecyclerViewAdapter(Context context) {
@@ -67,7 +68,7 @@ class PersonInSpaceRecyclerViewAdapter
                 .transform(new PicassoBitmapTransform(IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT))
                 .into(holder.photoImageView,
                         PicassoPalette.with(holder.item.bioPhotoImageUrl(), holder.photoImageView)
-                                .use(Profile.VIBRANT)
+                                .use(Profile.VIBRANT_DARK)
                                 .intoBackground(holder.textContainerView));
 
         // Set unique transition name to each photo imageView
@@ -82,7 +83,8 @@ class PersonInSpaceRecyclerViewAdapter
             @Override
             public void onClick(View v) {
                 if (onPersonSelectedListener != null) {
-                    onPersonSelectedListener.onPersonSelected(holder.item, holder.photoImageView);
+                    onPersonSelectedListener.onPersonSelected(holder.item, holder.photoImageView,
+                            holder.textContainerView);
                 }
             }
         });

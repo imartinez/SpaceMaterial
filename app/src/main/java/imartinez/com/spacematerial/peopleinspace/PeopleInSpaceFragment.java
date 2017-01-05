@@ -1,13 +1,14 @@
 package imartinez.com.spacematerial.peopleinspace;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Explode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,6 +39,7 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
     private PersonInSpaceRecyclerViewAdapter adapter;
     private Snackbar errorSnackbar;
     private ImageView selectedPhotoImageView;
+    private View selectedContentView;
 
     public static PeopleInSpaceFragment newInstance() {
         PeopleInSpaceFragment fragment = new PeopleInSpaceFragment();
@@ -52,6 +54,13 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
                 .inject(this);
 
         super.onActivityCreated(savedInstanceState);
+
+        // TODO: 5/1/17 place this here?
+        Explode explode = new Explode();
+        explode.excludeTarget("android.R.id.statusBarBackground", true);
+        explode.excludeTarget("android.R.id.navigationBarBackground", true);
+
+        getActivity().getWindow().setExitTransition(explode);
     }
 
     @Override
@@ -64,8 +73,10 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
         adapter = new PersonInSpaceRecyclerViewAdapter(getContext());
         adapter.setOnPersonSelectedListener(new OnPersonSelectedListener() {
             @Override
-            public void onPersonSelected(PersonInSpace personSelected, ImageView selectedPhotoImageView) {
+            public void onPersonSelected(PersonInSpace personSelected,
+                    ImageView selectedPhotoImageView, View selectedContentView) {
                 PeopleInSpaceFragment.this.selectedPhotoImageView = selectedPhotoImageView;
+                PeopleInSpaceFragment.this.selectedContentView = selectedContentView;
                 getPresenter().onPersonSelected(personSelected);
             }
         });
@@ -112,10 +123,15 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
     @Override
     public void showPersonInSpaceDetail(final PersonInSpace personInSpace) {
         Intent intent = new Intent(getActivity(), PersonInSpaceDetailActivity.class);
-// Pass data object in the bundle and populate details activity.
+        // Pass data object in the bundle and populate details activity.
         intent.putExtra(PersonInSpaceDetailActivity.PERSON_IN_SPACE_EXTRA, personInSpace);
+        Pair<View, String> sharedImagePair =
+                new Pair<>((View) selectedPhotoImageView, "person_in_space_detail_photo_imageview");
+        Pair<View, String> sharedContentPair =
+                new Pair<>((View) selectedContentView, "person_in_space_detail_content");
+
         ActivityOptionsCompat options = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(getActivity(), selectedPhotoImageView, "person_in_space_detail_photo_imageview");
+                makeSceneTransitionAnimation(getActivity(), sharedImagePair, sharedContentPair);
         startActivity(intent, options.toBundle());
     }
 }
