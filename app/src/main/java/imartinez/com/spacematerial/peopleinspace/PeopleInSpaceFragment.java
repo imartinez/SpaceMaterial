@@ -34,7 +34,6 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
     RecyclerView recyclerView;
 
     private DetailFragmentLoader detailFragmentLoader;
-
     private PersonInSpaceRecyclerViewAdapter adapter;
     private Snackbar errorSnackbar;
 
@@ -71,8 +70,6 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
 
         return view;
     }
-
-
 
     @Override
     public void onAttach(Context context) {
