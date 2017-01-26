@@ -9,6 +9,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.transition.AutoTransition;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.Transition.TransitionListener;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,7 +28,8 @@ import butterknife.ButterKnife;
 import com.github.florent37.picassopalette.PicassoPalette;
 import com.squareup.picasso.Picasso;
 import imartinez.com.spacematerial.R;
-import imartinez.com.spacematerial.visual.ChangeBoundsAndColor;
+import imartinez.com.spacematerial.visual.ChangeBoundsAndColorTransition;
+import imartinez.com.spacematerial.visual.FadeTransition;
 
 public class PersonInSpaceDetailActivity extends AppCompatActivity {
 
@@ -47,6 +50,9 @@ public class PersonInSpaceDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.person_in_space_detail_name_textview)
     TextView nameTextView;
+
+    @BindView(R.id.person_in_space_detail_location_textview)
+    TextView locationTextView;
 
     @BindView(R.id.person_in_space_detail_fab)
     View fab;
@@ -114,24 +120,44 @@ public class PersonInSpaceDetailActivity extends AppCompatActivity {
                                 .intoCallBack(new PicassoPalette.CallBack() {
                                     @Override
                                     public void onPaletteLoaded(Palette palette) {
-                                        appBarLayout.setBackgroundColor(palette.getDarkVibrantColor(
-                                                getResources().getColor(R.color.colorPrimaryDark)));
-                                        getWindow().setStatusBarColor(palette.getDarkVibrantColor(
-                                                getResources().getColor(R.color.colorPrimaryDark)));
+                                        int darkVibrantColor = palette.getDarkVibrantColor(
+                                                getResources().getColor(R.color.colorPrimaryDark));
 
-                                        ChangeBoundsAndColor
-                                                changeBoundsAndColorEnter = new ChangeBoundsAndColor(palette.getDarkVibrantColor(
-                                                getResources().getColor(R.color.colorPrimaryDark)), -1);
+                                        appBarLayout.setBackgroundColor(darkVibrantColor);
+                                        getWindow().setStatusBarColor(darkVibrantColor);
+
+                                        ChangeBoundsAndColorTransition changeBoundsAndColorEnter =
+                                                new ChangeBoundsAndColorTransition(
+                                                        palette.getDarkVibrantColor(
+                                                                getResources().getColor(
+                                                                        R.color.colorPrimaryDark)),
+                                                        -1);
 
                                         getWindow().setSharedElementEnterTransition(
                                                 changeBoundsAndColorEnter);
 
-                                        ChangeBoundsAndColor
-                                                changeBoundsAndColorReturn = new ChangeBoundsAndColor(-1, palette.getDarkVibrantColor(
-                                                getResources().getColor(R.color.colorPrimaryDark)));
+                                        ChangeBoundsAndColorTransition changeBoundsAndColorReturn =
+                                                new ChangeBoundsAndColorTransition(-1,
+                                                        palette.getDarkVibrantColor(
+                                                                getResources().getColor(
+                                                                        R.color.colorPrimaryDark)));
+
+                                        changeBoundsAndColorReturn.removeTarget("person_in_space_detail_name_textview");
+
+                                        AutoTransition autoTransition = new AutoTransition();
+                                        autoTransition.addTarget("person_in_space_detail_name_textview");
+
+                                        Transition fadeIn = new FadeTransition(0f, 1f, new LinearInterpolator());
+                                        fadeIn.addTarget("person_in_space_detail_name_textview");
+
+                                        TransitionSet returnTransitionSet = new TransitionSet();
+                                        returnTransitionSet.setOrdering(TransitionSet.ORDERING_SEQUENTIAL);
+                                        //returnTransitionSet.addTransition(autoTransition);
+                                        returnTransitionSet.addTransition(changeBoundsAndColorReturn);
+                                        //returnTransitionSet.addTransition(fadeIn);
 
                                         getWindow().setSharedElementReturnTransition(
-                                                changeBoundsAndColorReturn);
+                                                returnTransitionSet);
 
                                         getWindow().getSharedElementEnterTransition()
                                                 .addListener(sharedElementEnterTransitionListener);
@@ -145,12 +171,15 @@ public class PersonInSpaceDetailActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Set data
         nameTextView.setText(personInSpace.name());
+        locationTextView.setText(personInSpace.location());
 
         // Set transition animations
         TransitionSet enterTransitionSet = new TransitionSet();
         Slide slideBottom = new Slide(Gravity.BOTTOM);
         slideBottom.addTarget(nameTextView);
+        slideBottom.addTarget(locationTextView);
 
         Slide slideTop = new Slide(Gravity.TOP);
         slideTop.addTarget(appBarLayout);
@@ -158,8 +187,8 @@ public class PersonInSpaceDetailActivity extends AppCompatActivity {
         enterTransitionSet.addTransition(slideTop);
         enterTransitionSet.addTransition(slideBottom);
 
-        enterTransitionSet.setInterpolator(AnimationUtils.loadInterpolator(this,
-                android.R.interpolator.fast_out_slow_in));
+        enterTransitionSet.setInterpolator(
+                AnimationUtils.loadInterpolator(this, android.R.interpolator.fast_out_slow_in));
 
         getWindow().setEnterTransition(enterTransitionSet);
 

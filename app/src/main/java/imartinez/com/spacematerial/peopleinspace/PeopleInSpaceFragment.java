@@ -39,7 +39,7 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
     private PersonInSpaceRecyclerViewAdapter adapter;
     private Snackbar errorSnackbar;
     private ImageView selectedPhotoImageView;
-    private View selectedContentView;
+    private View selectedContentView, selectedNameView, selectedLocation;
 
     public static PeopleInSpaceFragment newInstance() {
         PeopleInSpaceFragment fragment = new PeopleInSpaceFragment();
@@ -74,12 +74,16 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
         adapter.setOnPersonSelectedListener(new OnPersonSelectedListener() {
             @Override
             public void onPersonSelected(PersonInSpace personSelected,
-                    ImageView selectedPhotoImageView, View selectedContentView) {
+                    ImageView selectedPhotoImageView, View selectedContentView,
+                    View selectedNameView, View selectedLocationView) {
                 PeopleInSpaceFragment.this.selectedPhotoImageView = selectedPhotoImageView;
                 PeopleInSpaceFragment.this.selectedContentView = selectedContentView;
+                PeopleInSpaceFragment.this.selectedNameView = selectedNameView;
+                PeopleInSpaceFragment.this.selectedLocation = selectedLocationView;
                 getPresenter().onPersonSelected(personSelected);
             }
         });
+
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -129,9 +133,14 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
                 new Pair<>((View) selectedPhotoImageView, "person_in_space_detail_photo_imageview");
         Pair<View, String> sharedContentPair =
                 new Pair<>((View) selectedContentView, "person_in_space_detail_content");
+        Pair<View, String> sharedNamePair =
+                new Pair<>((View) selectedNameView, "person_in_space_detail_name_textview");
+        Pair<View, String> sharedLocationPair =
+                new Pair<>((View) selectedLocation, "person_in_space_detail_location_textview");
 
         ActivityOptionsCompat options = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(getActivity(), sharedImagePair, sharedContentPair);
+                makeSceneTransitionAnimation(getActivity(), sharedImagePair, sharedContentPair,
+                        sharedNamePair, sharedLocationPair);
         startActivity(intent, options.toBundle());
     }
 }

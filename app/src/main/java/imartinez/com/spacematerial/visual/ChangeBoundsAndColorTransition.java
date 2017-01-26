@@ -16,7 +16,7 @@ import android.view.animation.AnimationUtils;
  * Transition that changes bounds and also transitions background color from a start color
  * to an end color.
  */
-public class ChangeBoundsAndColor extends ChangeBounds {
+public class ChangeBoundsAndColorTransition extends ChangeBounds {
 
     private static final String PROPERTY_COLOR = "property_color";
     private static final String[] TRANSITION_PROPERTIES = {
@@ -24,7 +24,7 @@ public class ChangeBoundsAndColor extends ChangeBounds {
     };
     private @ColorInt int startColor = Color.TRANSPARENT, endColor = Color.WHITE;
 
-    public ChangeBoundsAndColor(@ColorInt int startColor, @ColorInt int endColor) {
+    public ChangeBoundsAndColorTransition(@ColorInt int startColor, @ColorInt int endColor) {
         super();
         if (startColor != -1) this.startColor = startColor;
         if (endColor != -1) this.endColor = endColor;

@@ -36,7 +36,7 @@ class PersonInSpaceRecyclerViewAdapter
 
     interface OnPersonSelectedListener {
         void onPersonSelected(PersonInSpace personSelected, ImageView selectedPhotoImageView,
-                View selectedContentView);
+                View selectedContentView, View selectedNameView, View selectedLocationView);
     }
 
     PersonInSpaceRecyclerViewAdapter(Context context) {
@@ -75,7 +75,6 @@ class PersonInSpaceRecyclerViewAdapter
         holder.photoImageView.setTransitionName("photoImageView" + position);
 
         holder.nameTextView.setText(holder.item.name());
-        holder.titleTextView.setText(holder.item.title());
         holder.locationTextView.setText(holder.item.location());
 
         // Add click listener to select an animal
@@ -84,7 +83,7 @@ class PersonInSpaceRecyclerViewAdapter
             public void onClick(View v) {
                 if (onPersonSelectedListener != null) {
                     onPersonSelectedListener.onPersonSelected(holder.item, holder.photoImageView,
-                            holder.textContainerView);
+                            holder.textContainerView, holder.nameTextView, holder.locationTextView);
                 }
             }
         });
@@ -115,7 +114,6 @@ class PersonInSpaceRecyclerViewAdapter
         final ImageView photoImageView;
         final ImageView flagImageView;
         final TextView nameTextView;
-        final TextView titleTextView;
         final TextView locationTextView;
         PersonInSpace item;
 
@@ -126,7 +124,6 @@ class PersonInSpaceRecyclerViewAdapter
             photoImageView = (ImageView) view.findViewById(R.id.photo_imageview);
             flagImageView = (ImageView) view.findViewById(R.id.flag_imageview);
             nameTextView = (TextView) view.findViewById(R.id.name_textview);
-            titleTextView = (TextView) view.findViewById(R.id.title_textview);
             locationTextView = (TextView) view.findViewById(R.id.location_textview);
         }
     }

@@ -61,6 +61,26 @@
 
       <TextView
           android:id="@+id/person_in_space_detail_name_textview"
+          android:transitionName="person_in_space_detail_name_textview"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:lineSpacingExtra="8dp"
+          android:padding="@dimen/activity_horizontal_margin"
+          android:textSize="20sp"
+          android:alpha="0"/>
+
+      <!--<TextView
+          android:id="@+id/person_in_space_detail_title_textview"
+          android:transitionName="person_in_space_detail_title_textview"
+          android:layout_width="match_parent"
+          android:layout_height="300dp"
+          android:lineSpacingExtra="8dp"
+          android:padding="@dimen/activity_horizontal_margin"
+          android:textSize="20sp"/>-->
+
+      <TextView
+          android:id="@+id/person_in_space_detail_location_textview"
+          android:transitionName="person_in_space_detail_location_textview"
           android:layout_width="match_parent"
           android:layout_height="300dp"
           android:lineSpacingExtra="8dp"
