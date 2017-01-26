@@ -1,7 +1,6 @@
 package imartinez.com.spacematerial.isslocation;
 
 import imartinez.com.spacematerial.base.BasePresenter;
-import imartinez.com.spacematerial.base.BasePresenterImpl;
 import imartinez.com.spacematerial.connectivity.ConnectivityController;
 import imartinez.com.spacematerial.isslocation.IssLocationPresenter.IssLocationRouter;
 import imartinez.com.spacematerial.isslocation.IssLocationPresenter.IssLocationView;
@@ -12,8 +11,7 @@ import javax.inject.Inject;
 
 import java.util.concurrent.TimeUnit;
 
-class IssLocationPresenter extends BasePresenterImpl<IssLocationView, IssLocationRouter>
-        implements BasePresenter<IssLocationView, IssLocationRouter> {
+class IssLocationPresenter extends BasePresenter<IssLocationView, IssLocationRouter> {
 
     interface IssLocationView {
         // TODO: 26/10/16 Use viewModel? Current model is immutable
