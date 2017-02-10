@@ -3,6 +3,7 @@ package imartinez.com.spacematerial.peopleinspace;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -30,7 +31,9 @@ import imartinez.com.spacematerial.util.EmptyTransitionListener;
 
 public class PersonInSpaceDetailActivity extends AppCompatActivity {
 
-    static final String PERSON_IN_SPACE_EXTRA = "PERSON_IN_SPACE_EXTRA";
+    static final String PERSON_IN_SPACE_DATA = "PERSON_IN_SPACE_DATA";
+    static final String PERSON_IN_SPACE_IMAGE = "PERSON_IN_SPACE_IMAGE";
+
     private PersonInSpace personInSpace;
 
     @BindView(R.id.person_in_space_detail_collapsing_appbar)
@@ -62,21 +65,29 @@ public class PersonInSpaceDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_in_space_detail);
 
-        // Postpone the shared element enter transition, in order to give time
-        // to load images asynchronously.
-        postponeEnterTransition();
-
         ButterKnife.bind(this);
 
         initViews();
     }
 
     private void initViews() {
-        personInSpace = (PersonInSpace) getIntent().getSerializableExtra(PERSON_IN_SPACE_EXTRA);
+        personInSpace = (PersonInSpace) getIntent().getSerializableExtra(PERSON_IN_SPACE_DATA);
+
+        // Toolbar
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        appBarLayout.addOnOffsetChangedListener(new AppBarOnOffsetChangedListener());
+
+        // Data
+        Bitmap bitmap = getIntent().getParcelableExtra(PERSON_IN_SPACE_IMAGE);
+        photoImageView.setImageBitmap(bitmap);
+        nameTextView.setText(personInSpace.name());
+        locationTextView.setText(personInSpace.location());
 
         // Load photo using Picasso, and set text container background using Palette.
         Picasso.with(this)
                 .load(personInSpace.bioPhotoImageUrl())
+                .noPlaceholder()
                 .into(photoImageView,
                         PicassoPalette.with(personInSpace.bioPhotoImageUrl(), photoImageView)
                                 .intoCallBack(new PicassoPalette.CallBack() {
@@ -85,22 +96,9 @@ public class PersonInSpaceDetailActivity extends AppCompatActivity {
                                         int darkVibrantColor = palette.getDarkVibrantColor(
                                                 getResources().getColor(R.color.colorPrimaryDark));
 
-                                        //appBarLayout.setBackgroundColor(darkVibrantColor);
                                         getWindow().setStatusBarColor(darkVibrantColor);
-
-                                        // Now we are ready to start the transition
-                                        startPostponedEnterTransition();
                                     }
                                 }));
-
-        // Toolbar
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        appBarLayout.addOnOffsetChangedListener(new AppBarOnOffsetChangedListener());
-
-        // Data
-        nameTextView.setText(personInSpace.name());
-        locationTextView.setText(personInSpace.location());
 
         // Set transition animations
         TransitionSet enterTransitionSet = new TransitionSet();

@@ -1,6 +1,7 @@
 package imartinez.com.spacematerial.peopleinspace;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -113,8 +114,10 @@ public class PeopleInSpaceFragment extends BaseCleanFragment<PeopleInSpacePresen
     @Override
     public void showPersonInSpaceDetail(final PersonInSpace personInSpace) {
         Intent intent = new Intent(getActivity(), PersonInSpaceDetailActivity.class);
-        // Pass data object in the bundle and populate details activity.
-        intent.putExtra(PersonInSpaceDetailActivity.PERSON_IN_SPACE_EXTRA, personInSpace);
+        // Pass data object in the bundle to populate details activity
+        intent.putExtra(PersonInSpaceDetailActivity.PERSON_IN_SPACE_DATA, personInSpace);
+        intent.putExtra(PersonInSpaceDetailActivity.PERSON_IN_SPACE_IMAGE,
+                ((BitmapDrawable) selectedPhotoImageView.getDrawable()).getBitmap());
         // Transition animation with shared elements
         ActivityOptionsCompat options = ActivityOptionsCompat.
                 makeSceneTransitionAnimation(getActivity(), selectedPhotoImageView,
