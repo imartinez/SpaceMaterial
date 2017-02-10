@@ -17,10 +17,10 @@ Sample app applying modern architecture concepts (Rx, AutoValue, MVP, CLEAN, DI.
 - Picasso transformations
 - Offline/Online transition management
 - DiffUtil to avoid repainting in recyclerview
+- Material transitions with shared elements
 
 # TO DO/TO ADD IN THE APP
 - Timber
-- Material transitions
 - Vector animations
 - Functional approach where possible
 - Unit tests (DaggerMock?)
