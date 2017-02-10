@@ -35,8 +35,7 @@ class PersonInSpaceRecyclerViewAdapter
     private OnPersonSelectedListener onPersonSelectedListener;
 
     interface OnPersonSelectedListener {
-        void onPersonSelected(PersonInSpace personSelected, ImageView selectedPhotoImageView,
-                View selectedContentView, View selectedNameView, View selectedLocationView);
+        void onPersonSelected(PersonInSpace personSelected, ImageView selectedPhotoImageView);
     }
 
     PersonInSpaceRecyclerViewAdapter(Context context) {
@@ -82,8 +81,7 @@ class PersonInSpaceRecyclerViewAdapter
             @Override
             public void onClick(View v) {
                 if (onPersonSelectedListener != null) {
-                    onPersonSelectedListener.onPersonSelected(holder.item, holder.photoImageView,
-                            holder.textContainerView, holder.nameTextView, holder.locationTextView);
+                    onPersonSelectedListener.onPersonSelected(holder.item, holder.photoImageView);
                 }
             }
         });

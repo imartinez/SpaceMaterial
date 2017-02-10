@@ -20,8 +20,6 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         app:contentScrim="?attr/colorPrimary"
-        app:expandedTitleMarginEnd="64dp"
-        app:expandedTitleMarginStart="48dp"
         app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
       <ImageView
@@ -53,39 +51,25 @@
 
     <LinearLayout
         android:id="@+id/person_in_space_detail_content"
-        android:transitionName="person_in_space_detail_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fabada"
         android:orientation="vertical">
 
       <TextView
           android:id="@+id/person_in_space_detail_name_textview"
-          android:transitionName="person_in_space_detail_name_textview"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:lineSpacingExtra="8dp"
           android:padding="@dimen/activity_horizontal_margin"
           android:textSize="20sp"
-          android:alpha="0"/>
-
-      <!--<TextView
-          android:id="@+id/person_in_space_detail_title_textview"
-          android:transitionName="person_in_space_detail_title_textview"
-          android:layout_width="match_parent"
-          android:layout_height="300dp"
-          android:lineSpacingExtra="8dp"
-          android:padding="@dimen/activity_horizontal_margin"
-          android:textSize="20sp"/>-->
+          tools:text="Peggy Whitson"/>
 
       <TextView
           android:id="@+id/person_in_space_detail_location_textview"
-          android:transitionName="person_in_space_detail_location_textview"
           android:layout_width="match_parent"
-          android:layout_height="300dp"
-          android:lineSpacingExtra="8dp"
+          android:layout_height="wrap_content"
           android:padding="@dimen/activity_horizontal_margin"
-          android:textSize="20sp"/>
+          android:textSize="20sp"
+          tools:text="International Space Station"/>
 
     </LinearLayout>
   </android.support.v4.widget.NestedScrollView>

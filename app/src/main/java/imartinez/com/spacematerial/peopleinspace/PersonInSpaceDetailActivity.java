@@ -1,25 +1,22 @@
 package imartinez.com.spacematerial.peopleinspace;
 
 import android.animation.Animator;
-import android.animation.Animator.AnimatorListener;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.transition.AutoTransition;
+import android.transition.Fade;
 import android.transition.Slide;
 import android.transition.Transition;
-import android.transition.Transition.TransitionListener;
 import android.transition.TransitionSet;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,8 +25,8 @@ import butterknife.ButterKnife;
 import com.github.florent37.picassopalette.PicassoPalette;
 import com.squareup.picasso.Picasso;
 import imartinez.com.spacematerial.R;
-import imartinez.com.spacematerial.visual.ChangeBoundsAndColorTransition;
-import imartinez.com.spacematerial.visual.FadeTransition;
+import imartinez.com.spacematerial.util.EmptyAnimatorListener;
+import imartinez.com.spacematerial.util.EmptyTransitionListener;
 
 public class PersonInSpaceDetailActivity extends AppCompatActivity {
 
@@ -38,6 +35,9 @@ public class PersonInSpaceDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.person_in_space_detail_collapsing_appbar)
     AppBarLayout appBarLayout;
+
+    @BindView(R.id.person_in_space_detail_collapsing)
+    CollapsingToolbarLayout collapsingToolbarLayout;
 
     @BindView(R.id.person_in_space_detail_toolbar)
     Toolbar toolbar;
@@ -56,44 +56,6 @@ public class PersonInSpaceDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.person_in_space_detail_fab)
     View fab;
-
-    private final TransitionListener sharedElementEnterTransitionListener =
-            new TransitionListener() {
-                @Override
-                public void onTransitionStart(Transition transition) {
-                }
-
-                @Override
-                public void onTransitionEnd(Transition transition) {
-                    Animator toolbarAnim = ObjectAnimator.ofFloat(toolbar, "alpha", 0f, 1f);
-                    toolbarAnim.setInterpolator(new DecelerateInterpolator());
-                    toolbarAnim.setDuration(200);
-                    toolbar.setVisibility(View.VISIBLE);
-                    toolbarAnim.start();
-
-                    Animator fabAnim = ObjectAnimator.ofPropertyValuesHolder(fab,
-                            PropertyValuesHolder.ofFloat(View.SCALE_X, 0f, 1f),
-                            PropertyValuesHolder.ofFloat(View.SCALE_Y, 0f, 1f));
-                    fabAnim.setInterpolator(new DecelerateInterpolator());
-                    fabAnim.setDuration(200);
-                    fab.setVisibility(View.VISIBLE);
-                    fabAnim.start();
-
-                    getWindow().getSharedElementEnterTransition().removeListener(this);
-                }
-
-                @Override
-                public void onTransitionCancel(Transition transition) {
-                }
-
-                @Override
-                public void onTransitionPause(Transition transition) {
-                }
-
-                @Override
-                public void onTransitionResume(Transition transition) {
-                }
-            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,75 +85,37 @@ public class PersonInSpaceDetailActivity extends AppCompatActivity {
                                         int darkVibrantColor = palette.getDarkVibrantColor(
                                                 getResources().getColor(R.color.colorPrimaryDark));
 
-                                        appBarLayout.setBackgroundColor(darkVibrantColor);
+                                        //appBarLayout.setBackgroundColor(darkVibrantColor);
                                         getWindow().setStatusBarColor(darkVibrantColor);
-
-                                        ChangeBoundsAndColorTransition changeBoundsAndColorEnter =
-                                                new ChangeBoundsAndColorTransition(
-                                                        palette.getDarkVibrantColor(
-                                                                getResources().getColor(
-                                                                        R.color.colorPrimaryDark)),
-                                                        -1);
-
-                                        getWindow().setSharedElementEnterTransition(
-                                                changeBoundsAndColorEnter);
-
-                                        ChangeBoundsAndColorTransition changeBoundsAndColorReturn =
-                                                new ChangeBoundsAndColorTransition(-1,
-                                                        palette.getDarkVibrantColor(
-                                                                getResources().getColor(
-                                                                        R.color.colorPrimaryDark)));
-
-                                        changeBoundsAndColorReturn.removeTarget("person_in_space_detail_name_textview");
-
-                                        AutoTransition autoTransition = new AutoTransition();
-                                        autoTransition.addTarget("person_in_space_detail_name_textview");
-
-                                        Transition fadeIn = new FadeTransition(0f, 1f, new LinearInterpolator());
-                                        fadeIn.addTarget("person_in_space_detail_name_textview");
-
-                                        TransitionSet returnTransitionSet = new TransitionSet();
-                                        returnTransitionSet.setOrdering(TransitionSet.ORDERING_SEQUENTIAL);
-                                        //returnTransitionSet.addTransition(autoTransition);
-                                        returnTransitionSet.addTransition(changeBoundsAndColorReturn);
-                                        //returnTransitionSet.addTransition(fadeIn);
-
-                                        getWindow().setSharedElementReturnTransition(
-                                                returnTransitionSet);
-
-                                        getWindow().getSharedElementEnterTransition()
-                                                .addListener(sharedElementEnterTransitionListener);
 
                                         // Now we are ready to start the transition
                                         startPostponedEnterTransition();
                                     }
                                 }));
 
+        // Toolbar
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        appBarLayout.addOnOffsetChangedListener(new AppBarOnOffsetChangedListener());
 
-        // Set data
+        // Data
         nameTextView.setText(personInSpace.name());
         locationTextView.setText(personInSpace.location());
 
         // Set transition animations
         TransitionSet enterTransitionSet = new TransitionSet();
+        Fade fade = new Fade();
+
         Slide slideBottom = new Slide(Gravity.BOTTOM);
-        slideBottom.addTarget(nameTextView);
-        slideBottom.addTarget(locationTextView);
+        slideBottom.addTarget(contentView);
 
-        Slide slideTop = new Slide(Gravity.TOP);
-        slideTop.addTarget(appBarLayout);
-
-        enterTransitionSet.addTransition(slideTop);
+        enterTransitionSet.addTransition(fade);
         enterTransitionSet.addTransition(slideBottom);
-
-        enterTransitionSet.setInterpolator(
-                AnimationUtils.loadInterpolator(this, android.R.interpolator.fast_out_slow_in));
 
         getWindow().setEnterTransition(enterTransitionSet);
 
+        getWindow().getSharedElementEnterTransition()
+                .addListener(new ShowFabOnEndTransitionListener());
     }
 
     @Override
@@ -206,22 +130,10 @@ public class PersonInSpaceDetailActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Animator toolbarAnim = ObjectAnimator.ofFloat(toolbar, "alpha", 1f, 0f);
-        toolbarAnim.setInterpolator(new DecelerateInterpolator());
-        toolbarAnim.setDuration(200);
-        toolbarAnim.start();
-
-        Animator fabAnim = ObjectAnimator.ofPropertyValuesHolder(fab,
-                PropertyValuesHolder.ofFloat(View.SCALE_X, 1f, 0f),
-                PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f, 0f));
-        fabAnim.setInterpolator(new DecelerateInterpolator());
-        fabAnim.setDuration(200);
-        fabAnim.start();
-        fabAnim.addListener(new AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
+        // Run hide animations before finishing
+        buildHideToolbarAnimator().start();
+        Animator hideFabAnimator = buildHideFabAnimator();
+        hideFabAnimator.addListener(new EmptyAnimatorListener() {
 
             @Override
             public void onAnimationEnd(Animator animator) {
@@ -234,11 +146,76 @@ public class PersonInSpaceDetailActivity extends AppCompatActivity {
                 fab.setVisibility(View.INVISIBLE);
                 finishAfterTransition();
             }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
         });
+        hideFabAnimator.start();
+    }
+
+    private Animator buildShowToolbarAnimator() {
+        Animator toolbarAnim = ObjectAnimator.ofFloat(toolbar, "alpha", 0f, 1f);
+        toolbarAnim.setInterpolator(new DecelerateInterpolator());
+        toolbarAnim.setDuration(200);
+        toolbar.setVisibility(View.VISIBLE);
+        return toolbarAnim;
+    }
+
+    private Animator buildHideToolbarAnimator() {
+        Animator toolbarAnim = ObjectAnimator.ofFloat(toolbar, "alpha", 1f, 0f);
+        toolbarAnim.setInterpolator(new DecelerateInterpolator());
+        toolbarAnim.setDuration(200);
+        return toolbarAnim;
+    }
+
+    private Animator buildShowFabAnimator() {
+        Animator fabAnim = ObjectAnimator.ofPropertyValuesHolder(fab,
+                PropertyValuesHolder.ofFloat(View.SCALE_X, 0f, 1f),
+                PropertyValuesHolder.ofFloat(View.SCALE_Y, 0f, 1f));
+        fabAnim.setInterpolator(new DecelerateInterpolator());
+        fabAnim.setDuration(200);
+        fab.setVisibility(View.VISIBLE);
+        return fabAnim;
+    }
+
+    private Animator buildHideFabAnimator() {
+        Animator fabAnim = ObjectAnimator.ofPropertyValuesHolder(fab,
+                PropertyValuesHolder.ofFloat(View.SCALE_X, 1f, 0f),
+                PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f, 0f));
+        fabAnim.setInterpolator(new DecelerateInterpolator());
+        fabAnim.setDuration(200);
+        return fabAnim;
+    }
+
+    /**
+     * TransitionListener that shows the FAB and toolbar after transition ends
+     */
+    private class ShowFabOnEndTransitionListener extends EmptyTransitionListener {
+        @Override
+        public void onTransitionEnd(Transition transition) {
+            buildShowToolbarAnimator().start();
+            buildShowFabAnimator().start();
+            getWindow().getSharedElementEnterTransition().removeListener(this);
+        }
+    }
+
+    /**
+     * Manages the visibility of the AppBar title. Only shows the title when the Collapsing
+     * Toolbar is collapsed
+     */
+    private class AppBarOnOffsetChangedListener implements AppBarLayout.OnOffsetChangedListener {
+        boolean isShow = false;
+        int scrollRange = -1;
+
+        @Override
+        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            if (scrollRange == -1) {
+                scrollRange = appBarLayout.getTotalScrollRange();
+            }
+            if (scrollRange + verticalOffset == 0) {
+                collapsingToolbarLayout.setTitle(personInSpace.name());
+                isShow = true;
+            } else if (isShow) {
+                collapsingToolbarLayout.setTitle(" ");
+                isShow = false;
+            }
+        }
     }
 }
