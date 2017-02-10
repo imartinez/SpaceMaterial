@@ -1,7 +1,6 @@
 package imartinez.com.spacematerial.peopleinspace;
 
 import imartinez.com.spacematerial.base.BasePresenter;
-import imartinez.com.spacematerial.base.BasePresenterImpl;
 import imartinez.com.spacematerial.connectivity.ConnectivityController;
 import imartinez.com.spacematerial.peopleinspace.PeopleInSpacePresenter.PeopleInSpaceRouter;
 import imartinez.com.spacematerial.peopleinspace.PeopleInSpacePresenter.PeopleInSpaceView;
@@ -13,8 +12,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-class PeopleInSpacePresenter extends BasePresenterImpl<PeopleInSpaceView, PeopleInSpaceRouter>
-        implements BasePresenter<PeopleInSpaceView, PeopleInSpaceRouter> {
+class PeopleInSpacePresenter extends BasePresenter<PeopleInSpaceView, PeopleInSpaceRouter> {
 
     interface PeopleInSpaceView {
         void presentPeopleInSpace(List<PersonInSpace> peopleInSpace);
