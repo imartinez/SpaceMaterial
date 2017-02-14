@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">SpaceMaterial</string>
 
+    <!-- Splash -->
+    <string name="splash_title">Space</string>
+    <string name="splash_subtitle">Material</string>
+
     <!-- Bottom bar -->
     <string name="iss_location">ISS Location</string>
     <string name="people_in_space">People in Space</string>
