@@ -8,7 +8,7 @@ public abstract class BasePresenter<V, R> {
 
     private V view;
     private R router;
-    private CompositeDisposable compositeDisposable;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     /**
      * Called when the bound view is created and ready.
@@ -32,7 +32,7 @@ public abstract class BasePresenter<V, R> {
      * Needed to create the relation between View-Presenter-Router.
      *
      * @param view   an active view of the needed type.
-     * @param router an initialized router of the needed type.
+     * @param router an initialized router of the needed type.tatus
      */
     public void bindViewAndRouter(V view, R router) {
         this.view = view;
@@ -91,8 +91,7 @@ public abstract class BasePresenter<V, R> {
      */
     public void disposeTracked() {
         if (compositeDisposable != null) {
-            compositeDisposable.dispose();
+            compositeDisposable.clear();
         }
-        compositeDisposable = new CompositeDisposable();
     }
 }
